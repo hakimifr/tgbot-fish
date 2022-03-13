@@ -7,51 +7,51 @@ function tg -d "Send message and more"
     switch $argv[1]
         # Sending messages
         case "--sendmsg"
-            set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case "--sendmarkdownv2msg"
-            set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]" -d "parse_mode=MarkdownV2")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]" -d "parse_mode=MarkdownV2")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
         # Replying
         case "--replymsg"
-            set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case "--replymarkdownv2msg"
-            set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
         # Editing & deleting
         case "--editmsg"
-            curl "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]"
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]"
         case "--editmarkdownv2msg"
-            curl "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2"
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2"
         case "--delmsg"
-            curl "$API/deleteMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/deleteMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
 
         # Stickers
         case "--sendsticker"
-            curl "$API/sendSticker" -d "chat_id=$argv[2]" -d "sticker=$argv[3]"
+            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "sticker=$argv[3]"
         case "--replysticker"
-            curl "$API/sendSticker" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "sticker=$argv[4]"
+            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "sticker=$argv[4]"
 
         # Forwarding
         case "--forwardmsg"
-            curl "$API/forwardMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
+            curl -s "$API/forwardMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
         case "--cpmsg"
-            curl "$API/copyMessage" -d "chat_id=$argv[2]" -d "from_chat_id=$argv[3]" -d "message_id=$argv[4]"
+            curl -s "$API/copyMessage" -d "chat_id=$argv[2]" -d "from_chat_id=$argv[3]" -d "message_id=$argv[4]"
 
         # Chat management
         case "--pinmsg"
-            curl "$API/pinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/pinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
         case "--unpinmsg"
-            curl "$API/unpinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/unpinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
         # TODO: Add ban, kick, etc
     end
 end
 
 function update -d "Get updates"
-    set -g fetch (curl "$API/getUpdates" -d "offset=$update_id" -d "timeout=60" | jq '.result[]')
+    set -g fetch (curl -s "$API/getUpdates" -d "offset=$update_id" -d "timeout=60" | jq '.result[]')
 
     if test -n "$fetch"
         set -g update_id (math $update_id + 1)
@@ -81,7 +81,7 @@ function update -d "Get updates"
 end
 
 function update_init -d "Get initial update ID"
-    set -g update_id (curl $API/getUpdates -d offset=-1 -d timeout=60 | jq '.result[].update_id')
+    set -g update_id (curl -s $API/getUpdates -d offset=-1 -d timeout=60 | jq '.result[].update_id')
 end
 
 function is_botowner -d "Check whether a user is botowner"
