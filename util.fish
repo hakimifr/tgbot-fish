@@ -18,7 +18,7 @@ function tg -d "Send message and more"
 			set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]")
 			set -g sent_msg_id (echo $result | jq '.result.message_id')
 		case "--replymarkdownv2msg"
-			set -l (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2")
+			set -l result (curl "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2")
 			set -g sent_msg_id (echo $result | jq '.result.message_id')
 
 		# Editing & deleting
