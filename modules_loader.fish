@@ -1,7 +1,7 @@
 #!/bin/fish
 
 function load_modules -d "Load all modules"
-        set -g modules (find modules -iname '*.fish')
+        set -g modules (find modules -maxdepth 1 -iname '*.fish')
         # An array of modules to be excluded,
         # useful for debugging or otherwise modules
         # that's only need to be loaded at a certain time
