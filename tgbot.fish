@@ -81,5 +81,6 @@ while true
             end
             tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $level% gay"
     end
-    set -ge ret_lowered_msg_text ret_msg_text
+    set -ge ret_lowered_msg_text
+    set -ge ret_msg_text
 end
