@@ -39,7 +39,7 @@ function tg -d "Send message and more"
         case "--forwardmsg"
             curl -s "$API/forwardMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
         case "--cpmsg"
-            curl -s "$API/copyMessage" -d "chat_id=$argv[2]" -d "from_chat_id=$argv[3]" -d "message_id=$argv[4]"
+            curl -s "$API/copyMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
 
         # Chat management
         case "--pinmsg"
