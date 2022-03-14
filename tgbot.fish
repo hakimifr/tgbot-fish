@@ -65,8 +65,8 @@ while true
                 continue
             end
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "Please wait..."
-            tg --forwardmsg "$ret_chat_id" "$saving_group_id" "$ret_msg_id"
-            tg --editmsg "$ret_chat_id" "$ret_msg_id" "Message forwarded"
+            tg --forwardmsg "$ret_chat_id" "$saving_group_id" "$ret_replied_msg_id"
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Message forwarded"
         case '*@hakimi0804*'
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "Saving this message link so Hakimi can read it later..."
             set -l reply_msg_id $sent_msg_id
