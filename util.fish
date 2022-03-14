@@ -77,6 +77,8 @@ function update -d "Get updates"
         set -g sticker_emoji (echo "$fetch" | jq -r '.message.sticker.emoji')
         set -g sticker_file_id (echo "$fetch" | jq -r '.message.sticker.file_id')
         set -g sticker_pack_name (echo "$fetch" | jq -r '.message.sticker.set_name')
+
+        set -ge fetch
     end
 end
 
