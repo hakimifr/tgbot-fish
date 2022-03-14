@@ -26,44 +26,34 @@ while true
 
     switch $ret_lowered_msg_text
         case '/help*' '.help*'
-            begin
-                tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "$help_message" # $help_message located on extra.fish
-            end &
+            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "$help_message" # $help_message located on extra.fish
         case '/test*' '.test*'
-            begin
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "bot is running"
-            end &
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "bot is running"
         case '.calc*'
-            begin
-                set -l trimmed (string replace -r '^.calc' '' $ret_lowered_msg_text)
-                set -l calced (echo $trimmed | bc -l 2>&1)
-                if not echo "$calced" | grep -qi 'syntax error'
-                    tg --replymsg "$ret_chat_id" "$ret_msg_id" "$calced"
-                else
-                    tg --replymsg "$ret_chat_id" "$ret_msg_id" "Error occured"
-                end
-            end &
+            set -l trimmed (string replace -r '^.calc' '' $ret_lowered_msg_text)
+            set -l calced (echo $trimmed | bc -l 2>&1)
+            if not echo "$calced" | grep -qi 'syntax error'
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "$calced"
+            else
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Error occured"
+            end
         case '.magisk*'
-            begin
-                tg --sendmsg "$RET_CHAT_ID" "Fetching latest Magisk stable"
-                set -l latest (
-                    curl -s https://api.github.com/repos/topjohnwu/Magisk/releases/latest |
-                        grep "Magisk-v**.*.apk" |
-                        cut -d : -f 2,3 |
-                        tr -d \" |
-                        cut -d, -f2 |
-                        tr -d '\n' |
-                        tr -d ' '
-                )
-                set -l canary "https://raw.githubusercontent.com/topjohnwu/magisk-files/canary/app-debug.apk"
-                tg --editmarkdownv2msg "$RET_CHAT_ID" "$SENT_MSG_ID" "[Latest stable]($LATEST_STABLE)"
-            end &
+            tg --sendmsg "$RET_CHAT_ID" "Fetching latest Magisk stable"
+            set -l latest (
+                curl -s https://api.github.com/repos/topjohnwu/Magisk/releases/latest |
+                    grep "Magisk-v**.*.apk" |
+                    cut -d : -f 2,3 |
+                    tr -d \" |
+                    cut -d, -f2 |
+                    tr -d '\n' |
+                    tr -d ' '
+            )
+            set -l canary "https://raw.githubusercontent.com/topjohnwu/magisk-files/canary/app-debug.apk"
+            tg --editmarkdownv2msg "$RET_CHAT_ID" "$SENT_MSG_ID" "[Latest stable]($LATEST_STABLE)"
         case '.neofetch'
-            begin
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "This may take a while as there's quite a few packages in this laptop..."
-                set -l neofetch_output (neofetch --stdout)
-                tg --editmsg "$ret_chat_id" "$sent_msg_id" "$neofetch_output"
-            end &
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "This may take a while as there's quite a few packages in this laptop..."
+            set -l neofetch_output (neofetch --stdout)
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "$neofetch_output"
         case '.save'
             if not is_botowner
                 err_not_botowner
@@ -78,22 +68,18 @@ while true
             tg --forwardmsg "$ret_chat_id" "$saving_group_id" "$ret_msg_id"
             tg --editmsg "$ret_chat_id" "$ret_msg_id" "Message forwarded"
         case '*@hakimi0804*'
-            begin
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Saving this message link so Hakimi can read it later..."
-                set -l reply_msg_id $sent_msg_id
-                set -l group_id (string replace '^-100' '' $ret_chat_id)
-                tg --sendmsg "$tagger_group_id" "New tag: https://t.me/c/$group_id/$ret_msg_id"
-                tg --delmsg "$ret_chat_id" "$reply_msg_id"
-            end &
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Saving this message link so Hakimi can read it later..."
+            set -l reply_msg_id $sent_msg_id
+            set -l group_id (string replace '^-100' '' $ret_chat_id)
+            tg --sendmsg "$tagger_group_id" "New tag: https://t.me/c/$group_id/$ret_msg_id"
+            tg --delmsg "$ret_chat_id" "$reply_msg_id"
         case '/gay*'
-            begin
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Determining your gayness, please wait..."
-                set -l level (shuf -i 0-165 -n1)
-                while test "$level" -gt 100
-                    set level (shuf -i 0-165 -n1)
-                end
-                tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $level% gay"
-            end &
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Determining your gayness, please wait..."
+            set -l level (shuf -i 0-165 -n1)
+            while test "$level" -gt 100
+                set level (shuf -i 0-165 -n1)
+            end
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $level% gay"
     end
     set -ge ret_lowered_msg_text ret_msg_text
 end
