@@ -93,18 +93,23 @@ function err_not_botowner -d "Reply with a message stating they aren't the bot o
     tg --replymsg "$ret_chat_id" "$ret_msg_id" "You are not allowed to use this command."
 end
 
+function __pr_gen
+    set -l date (date +%H:%M:%S)
+    echo -e "$date - [$argv[1]] - $argv[2]"
+end
+
 function pr_info
-    set_color green; echo -e "$argv[1]\t: $argv[2]"; set_color normal
+    set_color green; __pr_gen $argv[1] $argv[2]; set_color normal
 end
 
 function pr_warn
-    set_color yellow; echo -e "$argv[1]\t: $argv[2]"; set_color normal
+    set_color yellow; __pr_gen $argv[1] $argv[2]; set_color normal
 end
 
 function pr_error
-    set_color red; echo -e "$argv[1]\t: $argv[2]"; set_color normal
+    set_color red; __pr_gen $argv[1] $argv[2]; set_color normal
 end
 
 function pr_debug
-    set_color magenta; echo -e "$argv[1]\t: $argv[2]"; set_color normal
+    set_color magenta; __pr_gen $argv[1] $argv[2]; set_color normal
 end
