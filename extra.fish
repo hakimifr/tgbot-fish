@@ -14,6 +14,7 @@ end
 set -g fwd_approved_chat_id \
     "-1001299514785" \
     "-1001155763792"
+set -g fwd_auth_user $bot_owner_id (command cat modules/assets/rm6785_auth_user)
 set -g fwd_to "-1001384382397"
 set -g saving_group_id "-1001607510711"
 set -g tagger_group_id "-1001530403261"
