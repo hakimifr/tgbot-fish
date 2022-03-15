@@ -24,7 +24,7 @@ while true
     # Run modules
     run_modules
 
-    switch $ret_lowered_msg_text
+    switch "$ret_lowered_msg_text"
         case '/help*' '.help*'
             tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "$help_message" # $help_message located on extra.fish
         case '/test*' '.test*'
