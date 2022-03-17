@@ -12,15 +12,14 @@ function load_modules
 
     pr_info "modules_loader" "Starting to load modules"
     for module in $modules
-        set -l exclude_module_continue_marker false
         for excl in $exclude_modules
             if test "$module" = "$excl"
-                set exclude_module_continue_marker true
+                set -g exclude_module_continue_marker true
                 break
             end
         end
-        if test "$exclude_module_continnue_marker" = true
-            pr_info "modules_loader" "Skipping module: $module"
+        if test "$exclude_module_continue_marker" = true
+            pr_warn "modules_loader" "Skipping module: $module"
             set exclude_module_continue_marker false
             continue
         end
