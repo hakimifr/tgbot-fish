@@ -86,7 +86,7 @@ while true
             while test "$sexiness" -gt 100
                 set sexiness (shuf -i 0-165 -n1)
             end
-            tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $sexiness% level sexy"
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $sexiness% sexy"
     end
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
