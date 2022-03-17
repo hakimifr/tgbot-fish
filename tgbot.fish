@@ -70,7 +70,7 @@ while true
         case '*@hakimi0804*'
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "Saving this message link so Hakimi can read it later..."
             set -l reply_msg_id $sent_msg_id
-            set -l group_id (string replace '^-100' '' $ret_chat_id)
+            set -l group_id (string replace -r -- '^-100' '' $ret_chat_id)
             tg --sendmsg "$tagger_group_id" "New tag: https://t.me/c/$group_id/$ret_msg_id"
             tg --delmsg "$ret_chat_id" "$reply_msg_id"
         case '/gay*'
