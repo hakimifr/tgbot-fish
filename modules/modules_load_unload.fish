@@ -56,6 +56,8 @@ function modules_load_unload -d "Module: modules/modules_load_unload" --on-event
                 end
                 set event_index (math $event_index + 1)
             end
+            pr_info "modules_load_unload" "Unloaded module: $module_name"
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Module $module_name unloaded"
         case '.load*'
             if not is_botowner
                 err_not_botowner
@@ -87,6 +89,7 @@ function modules_load_unload -d "Module: modules/modules_load_unload" --on-event
                 end
             end
 
+            pr_info "modules_load_unload" "Loading module: $module_name"
             set -l old_modules_event $modules_events
             source $module_name
             if test "$old_modules_event" = "$modules_events"
@@ -94,7 +97,9 @@ function modules_load_unload -d "Module: modules/modules_load_unload" --on-event
                 pr_error "modules_load_unload" "Failed to load $module_name"
                 return
             end
+            pr_info "modules_load_unload" "Loaded: $module_name"
 
             set -ga loaded_modules "$module_name"
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Module $module_name loaded"
     end
 end
