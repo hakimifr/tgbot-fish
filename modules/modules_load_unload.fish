@@ -14,7 +14,7 @@ function modules_load_unload -d "Module: modules/modules_load_unload" --on-event
                 return
             end
 
-            if test -z (string replace -r '^.unload' $ret_lowered_msg_text)
+            if test -z (string replace -r '^.unload' '' $ret_lowered_msg_text)
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "Give module name to unload please"
                 return
             end
