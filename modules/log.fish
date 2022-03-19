@@ -1,6 +1,11 @@
 #!/bin/fish
 
-set -ga modules_events "adb_log_listener"
+set -g __module_name "ADB logs (log.fish)"
+set -g __module_description "Easily take logs from telegram"
+set -g __module_version 69
+set -g __module_events "adb_log_listener"
+set -g __module_functions "log" "log.for.five.sec" "log.purge" "log.upload" "log.gen.gist" "log.editmsg" "log.date" "log.scrub.gist"
+
 function log --on-event 'adb_log_listener'
     log.scrub.gist
     switch $ret_lowered_msg_text

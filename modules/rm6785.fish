@@ -1,6 +1,11 @@
 #!/bin/fish
 
-set -ga modules_events "testing_group_rm6785_ch"
+set -g __module_name "RM6785 management module (rm6785.fish)"
+set -g __module_description "Post ROMs and recovery without worrying about forward tag."
+set -g __module_version 69
+set -g __module_events "testing_group_rm6785_ch"
+set -g __module_functions "realme_rm"
+
 function realme_rm --on-event 'testing_group_rm6785_ch'
     switch $ret_lowered_msg_text
         case '.sticker*'
