@@ -10,12 +10,17 @@ set -e fish_version
 
 set width $COLUMNS
 set text "Sourcing core scripts"
-set_color -b brmagenta; set_color black; echo -n "$text"; set_color normal
+set_color -b brmagenta
+set_color black
+echo -n "$text"
+set_color normal
 set count (echo "$text" | string split '' | count)
 for i in (seq (math $width - $count))
-    set_color -b brmagenta; echo -n ' '
+    set_color -b brmagenta
+    echo -n ' '
 end
-set_color normal; echo
+set_color normal
+echo
 set -e width count i text
 
 source extra.fish

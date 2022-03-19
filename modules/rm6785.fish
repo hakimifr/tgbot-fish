@@ -3,10 +3,10 @@
 set -g __module_name "RM6785 management module (rm6785.fish)"
 set -g __module_description "Post ROMs and recovery without worrying about forward tag."
 set -g __module_version 69
-set -g __module_events "testing_group_rm6785_ch"
-set -g __module_functions "realme_rm"
+set -g __module_events testing_group_rm6785_ch
+set -g __module_functions realme_rm
 
-function realme_rm --on-event 'testing_group_rm6785_ch'
+function realme_rm --on-event testing_group_rm6785_ch
     switch $ret_lowered_msg_text
         case '.sticker*'
             for user in $fwd_auth_user
@@ -31,7 +31,7 @@ function realme_rm --on-event 'testing_group_rm6785_ch'
                         else
                             tg --replymsg "$ret_chat_id" "$ret_msg_id" "Hold on..."
                             tg --cpmsg "$ret_chat_id" "$fwd_to" "$ret_replied_msg_id"
-                            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Posted"
+                            tg --editmsg "$ret_chat_id" "$sent_msg_id" Posted
                         end
                     else
                     end
@@ -52,7 +52,7 @@ function realme_rm --on-event 'testing_group_rm6785_ch'
                 if test "$ret_replied_msg_id" = null
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
-                    echo "$ret_replied_msgger_id" >> modules/assets/rm6785_auth_user
+                    echo "$ret_replied_msgger_id" >>modules/assets/rm6785_auth_user
                     set -g fwd_auth_user $bot_owner_id (command cat modules/assets/rm6785_auth_user)
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
                 end

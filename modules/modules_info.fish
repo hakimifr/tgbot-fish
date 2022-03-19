@@ -3,10 +3,10 @@
 set -g __module_name "Modules info (modules_info.fish)"
 set -g __module_description "Module to view an invidual module info."
 set -g __module_version 69
-set -g __module_events "info"
-set -g __module_functions "module_info"
+set -g __module_events info
+set -g __module_functions module_info
 
-function module_info --on-event 'info'
+function module_info --on-event info
     switch $ret_lowered_msg_text
         case '.modinfo*'
             if test -z (string replace -r '^.modinfo' '' $ret_lowered_msg_text)

@@ -27,16 +27,16 @@ function __module_load
     # 6. Write module infos into a file in metadata/modulebasename.fish
     # 7. Append functions and events to a global variable if no conflict found
     __module_load_unload::sanitize
-    pr_info "modules_loader" "__module_load: Loading module: $argv[1]"
+    pr_info modules_loader "__module_load: Loading module: $argv[1]"
 
     if test -z "$argv[1]"
-        pr_error "modules_loader" "__module_unload: No filename given"
+        pr_error modules_loader "__module_unload: No filename given"
         return 1 # Don't waste time if no file is given
     end
 
     # Nor when the file does not exist
     if not test -f "$argv[1]"
-        pr_error "modules_loader" "__module_load: File $argv[1] does not exist."
+        pr_error modules_loader "__module_load: File $argv[1] does not exist."
         return 2
     end
 
@@ -50,8 +50,8 @@ function __module_load
         or not set -q __module_description
         or not set -q __module_events
         or not set -q __module_functions
-        pr_warn "modules_loader" "__module_load: Module $argv[1] did not set one of the following property: __module_name, __module_version, __module_description, __module_events, __module_functions"
-        pr_error "modules_loader" "__module_load: Cannot proceed loading module $argv[1] due to previous error."
+        pr_warn modules_loader "__module_load: Module $argv[1] did not set one of the following property: __module_name, __module_version, __module_description, __module_events, __module_functions"
+        pr_error modules_loader "__module_load: Cannot proceed loading module $argv[1] due to previous error."
         # Cleanup & abort
         __module_load_unload::sanitize
         return 3
@@ -64,7 +64,7 @@ function __module_load
     for ev in $__module_events
         for eve in $modules_events
             if test "$ev" = "$eve"
-                pr_error "modules_loader" "__module_load: Fatal! A module tries to append an event which is already occupied by other module."
+                pr_error modules_loader "__module_load: Fatal! A module tries to append an event which is already occupied by other module."
                 set fatal_exception_event $ev
                 set abort true
                 break
@@ -81,7 +81,7 @@ function __module_load
         end
         for fn in $modules_events
             if test "$ev" = "$eve"
-                pr_error "modules_loader" "__module_load: Fatal! A module tries to append a function which is already occupied by other module."
+                pr_error modules_loader "__module_load: Fatal! A module tries to append a function which is already occupied by other module."
                 set fatal_exception_function $ev
                 set abort true
                 break
@@ -141,17 +141,17 @@ set -g __module_version \"$__module_version\"
 set -g __module_description \"$__module_description\"
 set -g __module_events \"$__module_events\"
 set -g __module_functions \"$__module_functions\"
-" > metadata/$module_basename
+" >metadata/$module_basename
 
     # Append events and functions to a global variables
     set -ga modules_events $__module_events
     set -ga modules_functions $__module_functions
-    pr_info "modules_loader" "__module_load: Loaded module $argv[1]"
-    pr_debug "modules_loader" "__module_load: Module $argv[1] name: $__module_name"
-    pr_debug "modules_loader" "__module_load: Module $argv[1] version: $__module_version"
-    pr_debug "modules_loader" "__module_load: Module $argv[1] description: $__module_description"
-    pr_debug "modules_loader" "__module_load: Module $argv[1] events: $__module_events"
-    pr_debug "modules_loader" "__module_load: Module $argv[1] functions: $__module_functions"
+    pr_info modules_loader "__module_load: Loaded module $argv[1]"
+    pr_debug modules_loader "__module_load: Module $argv[1] name: $__module_name"
+    pr_debug modules_loader "__module_load: Module $argv[1] version: $__module_version"
+    pr_debug modules_loader "__module_load: Module $argv[1] description: $__module_description"
+    pr_debug modules_loader "__module_load: Module $argv[1] events: $__module_events"
+    pr_debug modules_loader "__module_load: Module $argv[1] functions: $__module_functions"
     __module_load_unload::sanitize
     return 0
 end
@@ -161,16 +161,16 @@ function __module_unload
     # 2. Remove from global vars
     # 3. unset its functions and events
     # 4. Remove it's file from metadata dir
-    pr_info "modules_loader" "Unloading module: $argv[1]"
+    pr_info modules_loader "Unloading module: $argv[1]"
 
     if test -z "$argv[1]"
-        pr_error "modules_loader" "__module_unload: No filename given"
+        pr_error modules_loader "__module_unload: No filename given"
         return 1
     end
 
     set -l module_basename (basename $argv[1])
     if not test -f metadata/$module_basename
-        pr_error "modules_loader" "__module_unload: Failed to unload module: $argv[1], module does not exist."
+        pr_error modules_loader "__module_unload: Failed to unload module: $argv[1], module does not exist."
         return 2
     end
 
@@ -178,12 +178,12 @@ function __module_unload
     source metadata/$module_basename
 
     # Erase functions
-    pr_debug "modules_loader" "Erasing module $argv[1] functions"
+    pr_debug modules_loader "Erasing module $argv[1] functions"
     for fn in $__module_functions
         set -l index 1
         for fns in $modules_functions
             if test "$fns" = "$fn"
-                pr_debug "modules_loader" "Erasing \$modules_functions at index $index"
+                pr_debug modules_loader "Erasing \$modules_functions at index $index"
                 set -ge modules_functions[$index]
             end
             set index (math $index + 1)
@@ -191,12 +191,12 @@ function __module_unload
     end
 
     # Erase events
-    pr_debug "modules_loader" "Erasing module $argv[1] events"
+    pr_debug modules_loader "Erasing module $argv[1] events"
     for ev in $__module_events
         set -l index 1
         for evs in $modules_events
             if test "$evs" = "$ev"
-                pr_debug "modules_loader" "Erasing \$modules_events at index $index"
+                pr_debug modules_loader "Erasing \$modules_events at index $index"
                 set -ge modules_events[$index]
             end
             set index (math $index + 1)
@@ -210,7 +210,7 @@ end
 
 function load_modules
     # Search for modules
-    pr_info "modules_loader" "Searching for modules"
+    pr_info modules_loader "Searching for modules"
     set -l modules (find modules -type f -iname '*.fish')
 
     # Load them

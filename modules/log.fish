@@ -3,10 +3,10 @@
 set -g __module_name "ADB logs (log.fish)"
 set -g __module_description "Easily take logs from telegram"
 set -g __module_version 69
-set -g __module_events "adb_log_listener"
-set -g __module_functions "log" "log.for.five.sec" "log.purge" "log.upload" "log.gen.gist" "log.editmsg" "log.date" "log.scrub.gist"
+set -g __module_events adb_log_listener
+set -g __module_functions log "log.for.five.sec" "log.purge" "log.upload" "log.gen.gist" "log.editmsg" "log.date" "log.scrub.gist"
 
-function log --on-event 'adb_log_listener'
+function log --on-event adb_log_listener
     log.scrub.gist
     switch $ret_lowered_msg_text
         case '.log*'
@@ -40,15 +40,15 @@ function log.for.five.sec
 
     set -l file_name
     switch $log_type
-        case 'all'
+        case all
             set file_name "$HOME/logs/adb_logcat_all.txt"
-            adb logcat -b all > $file_name &
-        case 'radio'
+            adb logcat -b all >$file_name &
+        case radio
             set file_name "$HOME/logs/adb_logcat_radio.txt"
-            adb logcat -b radio > $file_name &
+            adb logcat -b radio >$file_name &
         case '*'
             set file_name "$HOME/logs/adb_logcat.txt"
-            adb logcat > $file_name &
+            adb logcat >$file_name &
     end
     sleep 5
     kill $last_pid
@@ -62,7 +62,7 @@ function log.purge
     set -l date (log.date)
     set -ga log_progress "`$date` \\- Purging AutoPasteSuggestionHelper \\(contains clipboard content\\)$n"
     log.editmsg
-    sed -i '/AutoPasteSuggestionHelper/d' $file_name
+    sed -i /AutoPasteSuggestionHelper/d $file_name
     log.upload $file_name
 end
 
@@ -89,7 +89,7 @@ function log.gen.gist
     set -l esc_log_url (string replace -a '.' '\\.' $log_url)
     set -ga log_progress "`$date` \\- gist link: $esc_log_url$n"
     log.editmsg
-    echo $log_url >> ~/.gist_markers # Old gist will be deleted by log.scrub.gist once it exceeds 30
+    echo $log_url >>~/.gist_markers # Old gist will be deleted by log.scrub.gist once it exceeds 30
 end
 
 function log.editmsg
@@ -108,9 +108,9 @@ end
 function log.scrub.gist
     set -l gist_line_count (wc -l < ~/.gist_markers)
     if test "$gist_line_count" -gt 30
-        pr_info "log" "Gist used for adb log exceeds 30, deleting oldest gist"
+        pr_info log "Gist used for adb log exceeds 30, deleting oldest gist"
         set -l oldest_gist (head -n1 ~/.gist_markers)
         gh gist delete $oldest_gist
-        sed -i '1d' ~/.gist_markers
+        sed -i 1d ~/.gist_markers
     end
 end

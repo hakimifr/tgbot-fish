@@ -3,8 +3,8 @@
 set -g __module_name "Bot management module (bot_management.fish)"
 set -g __module_description "Stuffs like .restart and .reload."
 set -g __module_version 69
-set -g __module_events "management"
-set -g __module_functions "bot_management"
+set -g __module_events management
+set -g __module_functions bot_management
 
 if test "$bot_restarted" = true
     set -ge ret_lowered_msg_text
@@ -15,7 +15,7 @@ if test "$bot_restarted" = true
     set -ge tmp_sent_msg_id
 end
 
-function bot_management --on-event 'management'
+function bot_management --on-event management
     switch $ret_lowered_msg_text
         case '.restart'
             if not is_botowner

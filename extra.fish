@@ -12,14 +12,14 @@ function round -d "round a number"
 end
 
 set -g fwd_approved_chat_id \
-    "-1001299514785" \
-    "-1001155763792"
+    -1001299514785 \
+    -1001155763792
 set -g fwd_auth_user $bot_owner_id (command cat modules/assets/rm6785_auth_user)
-set -g fwd_to "-1001384382397"
-set -g saving_group_id "-1001607510711"
-set -g tagger_group_id "-1001530403261"
-set -g bot_owner_id "1024853832"
-set -g rm6785_update_sticker "CAACAgUAAxkBAAED_CFiFIVi0Z1YX3MOK9xnaylscRhWbQACNwIAAt6sOFUrmjW-3D3-2yME"
+set -g fwd_to -1001384382397
+set -g saving_group_id -1001607510711
+set -g tagger_group_id -1001530403261
+set -g bot_owner_id 1024853832
+set -g rm6785_update_sticker CAACAgUAAxkBAAED_CFiFIVi0Z1YX3MOK9xnaylscRhWbQACNwIAAt6sOFUrmjW-3D3-2yME
 set -g help_message '`.calc` \-\> Do math calculations
 `.magisk` \-\> Get latest magisk stable and canary
 `.fwdpost` \-\> \(deprecated\) Forward post to @RM6785 \(this command is restricted to testing group\)
