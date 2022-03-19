@@ -2,6 +2,11 @@
 
 source .token.fish
 
+if not set -q curl_out # Output of curl for tg() function
+    # Discard
+    set -g curl_out /dev/null
+end
+
 set API "https://api.telegram.org/bot$TOKEN"
 function tg -d "Send message and more"
     switch $argv[1]
@@ -23,29 +28,29 @@ function tg -d "Send message and more"
 
         # Editing & deleting
         case "--editmsg"
-            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]"
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" | jq -C . > $curl_out
         case "--editmarkdownv2msg"
-            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2"
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2" | jq -C . > $curl_out
         case "--delmsg"
-            curl -s "$API/deleteMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/deleteMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" | jq -C . > $curl_out
 
         # Stickers
         case "--sendsticker"
-            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "sticker=$argv[3]"
+            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "sticker=$argv[3]" | jq -C . > $curl_out
         case "--replysticker"
-            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "sticker=$argv[4]"
+            curl -s "$API/sendSticker" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "sticker=$argv[4]" | jq -C . > $curl_out
 
         # Forwarding
         case "--forwardmsg"
-            curl -s "$API/forwardMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
+            curl -s "$API/forwardMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]" | jq -C . > $curl_out
         case "--cpmsg"
-            curl -s "$API/copyMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]"
+            curl -s "$API/copyMessage" -d "from_chat_id=$argv[2]" -d "chat_id=$argv[3]" -d "message_id=$argv[4]" | jq -C . > $curl_out
 
         # Chat management
         case "--pinmsg"
-            curl -s "$API/pinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/pinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" | jq -C . > $curl_out
         case "--unpinmsg"
-            curl -s "$API/unpinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]"
+            curl -s "$API/unpinChatMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" | jq -C . > $curl_out
         # TODO: Add ban, kick, etc
     end
 end
