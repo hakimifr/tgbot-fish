@@ -73,7 +73,7 @@ function __module_load
         if test "$abort" = true
             break
         end
-        set -ga $ev modules_events
+        set -ga modules_events $ev
     end
 
     for fnt in $__module_functions
@@ -91,7 +91,7 @@ function __module_load
         if test "$abort" = true
             break
         end
-        set -ga $fn modules_functions
+        set -ga modules_functions $fn
     end
     ############ END module and events loading section #####################
 
