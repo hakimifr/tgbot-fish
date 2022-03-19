@@ -1,5 +1,13 @@
 #!/bin/fish
 
+# Need fish 3.4 and later for $() support
+set fish_version (string replace -a '.' '' $version)
+if test $fish_version -lt 340
+    echo (set_color brred)"Please use fish 3.4 or newer. This script uses fish 3.4 features such as \$() support which will not work on your current version of fish."(set_color normal)
+    exit 1
+end
+set -e fish_version
+
 set width $COLUMNS
 set text "Sourcing core scripts"
 set_color -b brmagenta; set_color black; echo -n "$text"; set_color normal
