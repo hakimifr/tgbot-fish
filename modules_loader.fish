@@ -153,6 +153,7 @@ set -g __module_functions \"$__module_functions\"
     pr_debug "modules_loader" "__module_load: Module $argv[1] events: $__module_events"
     pr_debug "modules_loader" "__module_load: Module $argv[1] functions: $__module_functions"
     __module_load_unload::sanitize
+    return 0
 end
 
 function __module_unload
@@ -204,6 +205,7 @@ function __module_unload
 
     rm -f metadata/$module_basename
     __module_load_unload::sanitize
+    return 0
 end
 
 function load_modules
