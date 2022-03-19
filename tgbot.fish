@@ -81,20 +81,6 @@ while true
             set -l group_id (string replace -r -- '^-100' '' $ret_chat_id)
             tg --sendmsg "$tagger_group_id" "New tag: https://t.me/c/$group_id/$ret_msg_id"
             tg --delmsg "$ret_chat_id" "$reply_msg_id"
-        case '/gay*'
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Determining your gayness, please wait..."
-            set -l level (shuf -i 0-165 -n1)
-            while test "$level" -gt 100
-                set level (shuf -i 0-165 -n1)
-            end
-            tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $level% gay"
-        case '/sexy*' '.sexy'
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Determining your sexiness, please wait..."
-            set -l sexiness (shuf -i 0-165 -n1)
-            while test "$sexiness" -gt 100
-                set sexiness (shuf -i 0-165 -n1)
-            end
-            tg --editmsg "$ret_chat_id" "$sent_msg_id" "You are $sexiness% sexy"
     end
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
