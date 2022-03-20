@@ -8,7 +8,7 @@ set -g __module_functions realme_rm
 
 function realme_rm --on-event testing_group_rm6785_ch
     switch $ret_lowered_msg_text
-        case '.sticker*'
+        case '.sticker' '.postupdatesticker'
             for user in $fwd_auth_user
                 if test "$msgger" = "$user"
                     if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
@@ -22,7 +22,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 end
             end
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to use this command"
-        case '.post*'
+        case '.post' '.fwdpost'
             for user in $fwd_auth_user
                 if test "$msgger" = "$user"
                     if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
@@ -39,7 +39,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 end
             end
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
-        case '.auth*'
+        case '.auth'
             set -l authorized false
             for user in $bot_owner_id $fwd_auth_user
                 if test "$msgger" = "$user"
