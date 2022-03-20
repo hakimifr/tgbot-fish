@@ -59,5 +59,15 @@ function realme_rm --on-event testing_group_rm6785_ch
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
             end
+        case '.lsauthed'
+            set -l authed_user (cat modules/assets/rm6785_auth_user)
+            set -l mention_user
+            for user in $authed_user
+                set -a mention_user "[User $user](tg://user?id=$user)"
+            end
+            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "\
+Authorized user to use `\\.post` and `\\.sticker`:
+$(for user in $mention_user; string replace -a '-' '\\-' $user; end)
+"
     end
 end
