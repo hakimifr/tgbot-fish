@@ -8,11 +8,11 @@ set -g __module_functions realme_rm
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
+`.auth` \-\> Authorize someone to use this module\.
 
 Deprecated commands:
 `.postupdatesticker` \-\> Does the same as `.sticker`\.
-`.fwdpost` \-\> Does the same as `.post`\.
-`.auth` \-\> Authorize someone to use this module\."
+`.fwdpost` \-\> Does the same as `.post`\."
 
 function realme_rm --on-event testing_group_rm6785_ch
     switch $ret_lowered_msg_text
