@@ -5,6 +5,14 @@ set -g __module_description "Post ROMs and recovery without worrying about forwa
 set -g __module_version 69
 set -g __module_events testing_group_rm6785_ch
 set -g __module_functions realme_rm
+set -g __module_help_message "Irrelevant outside testing group\. Available commands:
+`.sticker` \-\> Post update sticker to @RM6785\.
+`.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
+
+Deprecated commands:
+`.postupdatesticker` \-\> Does the same as `.sticker`\.
+`.fwdpost` \-\> Does the same as `.post`\.
+`.auth` \-\> Authorize someone to use this module\."
 
 function realme_rm --on-event testing_group_rm6785_ch
     switch $ret_lowered_msg_text

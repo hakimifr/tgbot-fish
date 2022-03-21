@@ -5,6 +5,9 @@ set -g __module_description "Stuffs like .restart and .reload."
 set -g __module_version 69
 set -g __module_events management
 set -g __module_functions bot_management
+set -g __module_help_message "Irrelevant to other than bot owner\. Available commands:
+`.restart` \-\> Restart the bot\. Quite buggy\.
+`.reload` \-\> Reload all modules\."
 
 if test "$bot_restarted" = true
     set -ge ret_lowered_msg_text

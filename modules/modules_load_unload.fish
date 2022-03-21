@@ -5,6 +5,9 @@ set -g __module_description "To be used to load and unload modules from telegram
 set -g __module_version 69
 set -g __module_events tgmodulemanager
 set -g __module_functions modules_load_unload
+set -g __module_help_message "Irrelevant to other than bot owner\. Available commands:
+`.load modulepath/modulename.fish` \-\> Load a module from the path given\.
+`.unload modulebasename` \-\> Unload a loaded module\."
 
 function modules_load_unload -d "Module: modules/modules_load_unload" --on-event tgmodulemanager
     switch $ret_lowered_msg_text
