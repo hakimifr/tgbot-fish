@@ -22,16 +22,9 @@ set -g bot_owner_id 1024853832
 set -g rm6785_update_sticker CAACAgUAAxkBAAED_CFiFIVi0Z1YX3MOK9xnaylscRhWbQACNwIAAt6sOFUrmjW-3D3-2yME
 set -g help_message '`.calc` \-\> Do math calculations
 `.magisk` \-\> Get latest magisk stable and canary
-`.fwdpost` \-\> \(deprecated\) Forward post to @RM6785 \(this command is restricted to testing group\)
-`.postupdatesticker` \(deprecated\) \-\> Post update sticker to @RM6785 \(this command is restricted to testing group\)
-`.sticker` \-\> Post update sticker to @RM6785
-`.post` \-\> Post ROM/recovery to update channel, syntax: `\.post \<replying to a message\>`
 `.save` \(bot owner only\) \-\> Save message
-`.log` \(bot owner only\) \-\> Take logs, available type: all, normal, radio
-`.ofp` \-\> Get ofp for a device, syntax: `.ofp RMX6969 C.69 IN`
-`.stat` \-\> View stat
-`.uptime` \-\> View this laptop uptime
-`.restart` \(bot owner only\) \-\> Restart the bot
-`.reload` \(bot owner only\) \-\> Reload all modules
-`.load` \(bot owner only\) \-\> Load a module, syntax: `\.load modules/gay\.sh`
-`.unload` \(bot owner only\) \-\> Unload a module, syntax: `\.unload modules/gay\.sh`'
+`.help`, `/help` \-\> View this help message
+`.test`, `/test` \-\> Check if the bot is running
+`.save` \(bot owner only\) \-\> Forward message to saving group
+
+Note: This list is incomplete\. Each modules have their own help message and you can view them individually\. List all loaded modules with `.lsmod` and view their help message with `.modhelp modulename.fish`\.'
