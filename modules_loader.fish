@@ -16,6 +16,7 @@ function __module_load_unload::sanitize # Sanitize function to cleanup vars
     set -ge __module_description
     set -ge __module_events
     set -ge __module_functions
+    set -ge __module_help_message
 end
 
 function __module_load
@@ -43,18 +44,23 @@ function __module_load
     # Source the given file
     source $argv[1]
 
-    # All of the property are mandatory
-    # throw if one of them are not set
+    # throw if one of required variables are not set
     if not set -q __module_name
         or not set -q __module_version
         or not set -q __module_description
         or not set -q __module_events
         or not set -q __module_functions
+        # __module_help_message is optional
         pr_warn modules_loader "__module_load: Module $argv[1] did not set one of the following property: __module_name, __module_version, __module_description, __module_events, __module_functions"
         pr_error modules_loader "__module_load: Cannot proceed loading module $argv[1] due to previous error."
         # Cleanup & abort
         __module_load_unload::sanitize
         return 3
+    end
+
+    # Replace __module_help_message if not given
+    if test -z "$__module_help_message"
+        set -g __module_help_message "No help message given from the module\\."
     end
 
     ############ BEGIN module and events loading section #####################
@@ -151,6 +157,7 @@ set -g __module_version \"$__module_version\"
 set -g __module_description \"$__module_description\"
 set -g __module_events $module_events_quoted
 set -g __module_functions $module_functions_quoted
+set -g __module_help_message \"$__module_help_message\"
 " >metadata/$module_basename
 
     # Append events and functions to a global variables

@@ -22,6 +22,7 @@ function module_info --on-event info
 Module name: $__module_name
 Module description: $__module_description
 Module version: $__module_version
+Module help message: Use .modhelp modulename to view individual module help message.
 Module events: $__module_events
 Module functions: $__module_functions
 "
@@ -32,6 +33,30 @@ Module functions: $__module_functions
 Loaded modules:
 $(for mod in $loaded_mod; basename $mod; end)
 "
+            module_info::cleanup
+        case '.modhelp*'
+            if test -z (string replace -r '^.modhelp' '' $ret_lowered_msg_text)
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Give a module to view help please"
+                return
+            end
+
+            module_info::fetch (string replace -r '^.modhelp ' '' $ret_lowered_msg_text)
+            if test $status -eq 2
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Module does not exist (or maybe not loaded?)"
+            else
+                set -l module_name (string replace -r '^.modhelp ' '' $ret_lowered_msg_text)
+                set -l module_name (string replace -a '-' '\\-' $module_name)
+                set -l module_name (string replace -a '_' '\\_' $module_name)
+                set -l module_name (string replace -a '.' '\\.' $module_name)
+                set -l error_code (curl -s "$API/sendMessage" -d "chat_id=$ret_chat_id" -d "reply_to_message_id=$ret_msg_id" -d "parse_mode=MarkdownV2" -d "text=Help for module $module_name:
+$__module_help_message" | jq '.error_code')
+                pr_debug modules_info "error_code: $error_code"
+                pr_debug modules_info "module_name: $module_name"
+                pr_debug modules_info "module help message: $__module_help_message"
+                if test "$error_code" != null -a "$error_code" = 400
+                    tg --replymsg "$ret_chat_id" "$ret_msg_id" "Telegram failed to parse markdown. Module author need to fix the module help message."
+                end
+            end
             module_info::cleanup
     end
 end
@@ -55,4 +80,5 @@ function module_info::cleanup
     set -ge __module_events
     set -ge __module_functions
     set -ge __module_description
+    set -ge __module_help_message
 end
