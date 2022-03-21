@@ -6,7 +6,8 @@ set -g __module_version 69
 set -g __module_events info
 set -g __module_functions module_info
 set -g __module_help_message "$(string replace '.' '\\.' $__module_description)
-`.modinfo modulename` \-\> View module info\."
+`.modinfo modulename` \-\> View module info\.
+`.modcat modulename` \-\> View a module content\."
 
 function module_info --on-event info
     switch $ret_lowered_msg_text
@@ -60,6 +61,22 @@ $__module_help_message" | jq '.error_code')
                 end
             end
             module_info::cleanup
+        case '.modcat*'
+            if test -z (string replace -r '^.modcat' '' $ret_lowered_msg_text)
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Give a module to cat please"
+                return
+            end
+
+            if not test -f modules/(string replace -r '^.modcat ' '' $ret_lowered_msg_text)
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Module does not exist (or maybe not loaded?)"
+            else
+                set -l termbin_link (nc termbin.com 9999 < modules/(string replace -r '^.modcat ' '' $ret_lowered_msg_text))
+                if test $status -ne 0
+                    tg --replymsg "$ret_chat_id" "$ret_msg_id" "An error occured"
+                else
+                    tg --replymsg "$ret_chat_id" "$ret_msg_id" "$termbin_link"
+                end
+            end
     end
 end
 
