@@ -19,7 +19,10 @@ jobs:
         shell: bash
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        run: echo "set -g TOKEN '$TELEGRAM_TOKEN'" > .token.fish
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+        run: |
+          echo "set -g TOKEN '$TELEGRAM_TOKEN'" > .token.fish
+          echo "set -g GIST_TOKEN '$GIST_TOKEN'" >> .token.fish
 
 ### ⬇ IMPORTANT PART ⬇ ###
 
