@@ -231,7 +231,20 @@ function load_modules
     set -l modules (find modules -type f -iname '*.fish')
 
     # Load them
+    set -l skip false
     for module in $modules
+        for skip_mod in $module_noautoload
+            if test "$module" = "$skip_mod"
+                set skip true
+                break
+            end
+        end
+
+        if test "$skip" = true
+            set skip false
+            pr_warn modules_loader "Skipping module $module"
+            continue
+        end
         __module_load $module
     end
 end
