@@ -40,6 +40,9 @@ function bot_management --on-event management
                 err_not_botowner
                 return
             end
+            for module in (find metadata -type f -iname '*.fish')
+                __module_unload $module
+            end
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reloading all modules"
             set -ge modules_events
             set -ge modules_functions
