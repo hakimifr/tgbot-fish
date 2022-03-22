@@ -114,9 +114,12 @@ function remove_authed_user
     if not set -q argv[1]
         return 1
     end
-    set -l fwd_auth_user (gh gist view $auth_gist_link | string replace -- "$argv[1]" '' | source)
+    set -l fwd_auth_user (echo -- "$fwd_auth_user" | string replace -- "$argv[1]" '')
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
-    echo $new_gist_content | source # Because why not
+    echo -n $new_gist_content | gh gist edit $auth_gist_link -
+    echo $new_gist_content | source # Get rid of extra spaces
+    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
+    echo -n $new_gist_content | gh gist edit $auth_gist_link -
 end
 
 function gh_auth
