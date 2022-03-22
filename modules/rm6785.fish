@@ -9,6 +9,7 @@ set -g __module_help_message "Irrelevant outside testing group\. Available comma
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
 `.auth` \-\> Authorize someone to use this module\.
+`.unauth` \-\> Remove someone's authorization of using this module\.
 
 Deprecated commands:
 `.postupdatesticker` \-\> Does the same as `.sticker`\.
@@ -68,6 +69,22 @@ function realme_rm --on-event testing_group_rm6785_ch
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
             end
+        case '.unauth'
+            set -l authorized false
+            if test "$msgger" = "$bot_owner_id"
+                set authorized true
+            end
+            if test $authorized = true
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Unauthorizing that user that user"
+                if test "$ret_replied_msg_id" = null
+                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
+                else
+                    remove_authed_user "$ret_replied_msgger_id"
+                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
+                end
+            else
+                tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
+            end
         case '.lsauthed'
             set -l authed_user (cat modules/assets/rm6785_auth_user)
             set -l mention_user
@@ -92,6 +109,15 @@ function set_authed_user
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $argv[1]"
     echo -n $new_gist_content | gh gist edit $auth_gist_link -
     echo $new_gist_content | source
+end
+
+function remove_authed_user
+    if not set -q argv[1]
+        return 1
+    end
+    set -l fwd_auth_user (gh gist view $auth_gist_link | string replace -- "$argv[1]" '' | source)
+    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
+    echo $new_gist_content | source # Because why not
 end
 
 function gh_auth
