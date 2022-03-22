@@ -88,7 +88,10 @@ function update -d "Get updates"
 end
 
 function update_init -d "Get initial update ID"
-    set -g update_id (curl -s $API/getUpdates -d offset=-1 -d timeout=60 | jq '.result[].update_id')
+    while test -z "$update_id"
+        set -g update_id (curl -s $API/getUpdates -d offset=-1 -d timeout=60 | jq '.result[].update_id')
+    end
+    pr_debug util "update init done. ID: $update_id"
 end
 
 function is_botowner -d "Check whether a user is botowner"
