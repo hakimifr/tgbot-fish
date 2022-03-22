@@ -14,10 +14,12 @@ Deprecated commands:
 `.postupdatesticker` \-\> Does the same as `.sticker`\.
 `.fwdpost` \-\> Does the same as `.post`\."
 
+set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
+
 function realme_rm --on-event testing_group_rm6785_ch
     switch $ret_lowered_msg_text
         case '.sticker' '.postupdatesticker'
-            for user in $fwd_auth_user
+            for user in $bot_owner_id $fwd_auth_user
                 if test "$msgger" = "$user"
                     if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
                         tg --replymsg "$ret_chat_id" "$ret_msg_id" "Hold on..."
@@ -31,7 +33,7 @@ function realme_rm --on-event testing_group_rm6785_ch
             end
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to use this command"
         case '.post' '.fwdpost'
-            for user in $fwd_auth_user
+            for user in $bot_owner_id $fwd_auth_user
                 if test "$msgger" = "$user"
                     if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
                         if test "$ret_replied_msg_id" = null
@@ -60,8 +62,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 if test "$ret_replied_msg_id" = null
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
-                    echo "$ret_replied_msgger_id" >>modules/assets/rm6785_auth_user
-                    set -g fwd_auth_user $bot_owner_id (command cat modules/assets/rm6785_auth_user)
+                    set_authed_user "$ret_replied_msgger_id"
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
                 end
             else
@@ -79,3 +80,33 @@ $(for user in $mention_user; string replace -a '-' '\\-' $user; end)
 "
     end
 end
+
+function read_authed_user
+    gh gist view $auth_gist_link | source
+end
+
+function set_authed_user
+    if not set -q argv[1]
+        return 1
+    end
+    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $argv[1]"
+    echo -n $new_gist_content | gh gist edit $auth_gist_link -
+    echo $new_gist_content | source
+end
+
+function gh_auth
+    if not set -q GIST_TOKEN
+        return
+    end
+    echo $GIST_TOKEN >modules/assets/gh_token
+    gh auth login --with-token < modules/assets/gh_token
+    rm -f modules/assets/gh_token
+    set -ge GIST_TOKEN
+end
+
+function gh_init
+    gh_auth
+    read_authed_user
+end
+
+gh_init
