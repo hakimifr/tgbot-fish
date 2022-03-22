@@ -51,7 +51,7 @@ while true
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "Error occured"
             end
         case '.magisk*'
-            tg --sendmsg "$RET_CHAT_ID" "Fetching latest Magisk stable"
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Fetching latest Magisk stable"
             set -l latest (
                 curl -s https://api.github.com/repos/topjohnwu/Magisk/releases/latest |
                     grep "Magisk-v**.*.apk" |
@@ -62,7 +62,8 @@ while true
                     tr -d ' '
             )
             set -l canary "https://raw.githubusercontent.com/topjohnwu/magisk-files/canary/app-debug.apk"
-            tg --editmarkdownv2msg "$RET_CHAT_ID" "$SENT_MSG_ID" "[Latest stable]($LATEST_STABLE)"
+            tg --editmarkdownv2msg "$ret_chat_id" "$sent_msg_id" "[Latest stable]($latest)
+[Latest canary]($canary)"
         case '.neofetch'
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "This may take a while as there's quite a few packages in this laptop..."
             set -l neofetch_output (neofetch --stdout)
