@@ -15,6 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Create .token.fish
+        shell: bash
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: echo "set -g TOKEN '$TELEGRAM_TOKEN'" > .token.fish
 
 ### ⬇ IMPORTANT PART ⬇ ###
 
