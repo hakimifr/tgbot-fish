@@ -129,7 +129,6 @@ function gh_auth
     echo $GIST_TOKEN >modules/assets/gh_token
     gh auth login --with-token <modules/assets/gh_token
     rm -f modules/assets/gh_token
-    set -ge GIST_TOKEN
 end
 
 function gh_init
