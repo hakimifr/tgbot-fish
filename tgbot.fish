@@ -44,8 +44,8 @@ while true
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "bot is running"
         case '.calc*'
             set -l trimmed (string replace -r '^.calc' '' $ret_lowered_msg_text)
-            set -l calced (echo $trimmed | bc -l 2>&1)
-            if not echo "$calced" | grep -qi 'syntax error'
+            set -l calced (echo $trimmed | math)
+            if test $status -eq 0
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "$calced"
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "Error occured"
