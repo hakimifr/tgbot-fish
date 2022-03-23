@@ -8,6 +8,7 @@ RUN dnf install -y dnf-plugins-core
 RUN dnf -y copr enable ignatenkobrain/fish
 RUN dnf install -y fish
 RUN dnf install -y gh
+RUN dnf install -y netcat
 RUN dnf upgrade -y
 
 # Use rpmfusion ffmpeg
