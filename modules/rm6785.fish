@@ -64,7 +64,8 @@ function realme_rm --on-event testing_group_rm6785_ch
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
                     set_authed_user "$ret_replied_msgger_id"
-                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
+                        and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
+                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
                 end
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
@@ -80,7 +81,8 @@ function realme_rm --on-event testing_group_rm6785_ch
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
                     remove_authed_user "$ret_replied_msgger_id"
-                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
+                        and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
+                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
                 end
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
@@ -102,16 +104,17 @@ function read_authed_user
 end
 
 function set_authed_user
-    if not set -q argv[1]
+    if string match -q -- $argv[1] $fwd_auth_user
         return 1
     end
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $argv[1]"
     echo -n $new_gist_content | gh gist edit $auth_gist_link -
     echo $new_gist_content | source
+    return 0
 end
 
 function remove_authed_user
-    if not set -q argv[1]
+    if not string match -q -- $argv[1] $fwd_auth_user
         return 1
     end
     set -l fwd_auth_user (echo -- "$fwd_auth_user" | string replace -- "$argv[1]" '')
@@ -120,6 +123,7 @@ function remove_authed_user
     echo $new_gist_content | source # Get rid of extra spaces
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
     echo -n $new_gist_content | gh gist edit $auth_gist_link -
+    return 0
 end
 
 function gh_auth
