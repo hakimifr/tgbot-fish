@@ -12,25 +12,25 @@ function tg -d "Send message and more"
     switch $argv[1]
         # Sending messages
         case --sendmsg
-            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]" -d "disable_web_page_preview=true")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case --sendmarkdownv2msg
-            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]" -d "parse_mode=MarkdownV2")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "text=$argv[3]" -d "parse_mode=MarkdownV2" -d "disable_web_page_preview=true")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
             # Replying
         case --replymsg
-            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "disable_web_page_preview=true")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case --replymarkdownv2msg
-            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2")
+            set -l result (curl -s "$API/sendMessage" -d "chat_id=$argv[2]" -d "reply_to_message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2" -d "disable_web_page_preview=true")
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
             # Editing & deleting
         case --editmsg
-            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" | jq -C . >$curl_out
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "disable_web_page_preview=true" | jq -C . >$curl_out
         case --editmarkdownv2msg
-            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2" | jq -C . >$curl_out
+            curl -s "$API/editMessageText" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" -d "text=$argv[4]" -d "parse_mode=MarkdownV2" -d "disable_web_page_preview=true" | jq -C . >$curl_out
         case --delmsg
             curl -s "$API/deleteMessage" -d "chat_id=$argv[2]" -d "message_id=$argv[3]" | jq -C . >$curl_out
 
