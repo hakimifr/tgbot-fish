@@ -67,6 +67,14 @@ function update -d "Get updates"
         set -g msgger (echo "$fetch" | jq '.message.from.id')
         set -g ret_file_id (echo "$fetch" | jq -r '.message.document.file_id')
 
+        # Names
+        set -g ret_first_name (echo "$fetch" | jq -r '.message.from.first_name')
+        set -g ret_last_name (echo "$fetch" | jq -r '.message.from.last_name')
+        set -g ret_username (echo "$fetch" | jq -r '.message.from.username')
+        set -g ret_replied_first_name (echo "$fetch" | jq -r '.message.reply_to_message.from.first_name')
+        set -g ret_replied_last_name (echo "$fetch" | jq -r '.message.reply_to_message.from.last_name')
+        set -g ret_replied_username (echo "$fetch" | jq -r '.message.reply_to_message.from.username')
+
         # Strings
         set -g ret_msg_text (echo "$fetch" | jq -r '.message.text')
         set -g first_name (echo "$fetch" | jq -r '.message.first_name')
