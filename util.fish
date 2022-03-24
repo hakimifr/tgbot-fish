@@ -113,29 +113,29 @@ end
 
 function __pr_gen
     set -l date (date +%H:%M:%S)
-    echo -e "$date - [$argv[1]] - $argv[2]"
+    echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]"
 end
 
 function pr_info
     set_color green
-    __pr_gen $argv[1] $argv[2]
+    __pr_gen INFO $argv[1] $argv[2]
     set_color normal
 end
 
 function pr_warn
     set_color yellow
-    __pr_gen $argv[1] $argv[2]
+    __pr_gen WARN $argv[1] $argv[2]
     set_color normal
 end
 
 function pr_error
     set_color red
-    __pr_gen $argv[1] $argv[2]
+    __pr_gen ERROR $argv[1] $argv[2]
     set_color normal
 end
 
 function pr_debug
     set_color magenta
-    __pr_gen $argv[1] $argv[2]
+    __pr_gen DEBUG $argv[1] $argv[2]
     set_color normal
 end
