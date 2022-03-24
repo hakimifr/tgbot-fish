@@ -64,7 +64,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 if test "$ret_replied_msg_id" = null
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
-                    set_authed_user "$ret_replied_msgger_id"
+                    set_authed_user
                         and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
                         or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
                 end
@@ -81,7 +81,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 if test "$ret_replied_msg_id" = null
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
-                    remove_authed_user "$ret_replied_msgger_id"
+                    remove_authed_user
                         and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
                         or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user wasn't authorized"
                 end
@@ -89,13 +89,23 @@ function realme_rm --on-event testing_group_rm6785_ch
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
             end
         case '.lsauthed'
-            set -l mention_user
+            set -l auth_message
+            set -l index 1
             for user in $fwd_auth_user
-                set -a mention_user "[User $user](tg://user?id=$user)"
+                if string match -qr -- '^@' $fwd_user_name[$index]
+                    set -a auth_message "User [$user](t.me/$(string replace -r '^@' '' $fwd_user_name[$index] | string replace -a '_' '\\_'))"
+                else
+                    set -a auth_message "User $user \\- $(echo -n $fwd_user_name | sed 's/[][`~!@#\$%^&*()-_=+{}\|;:",<.>/?'"'"']/\\&/g')"
+                end
+                set index (math $index + 1)
             end
-            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "\
-Authorized user to use `\\.post` and `\\.sticker`:
-$(for user in $mention_user; string replace -a '-' '\\-' $user; end)
+            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "
+Authorized user to use `.post` and `.sticker`:
+$(
+for msg in $auth_message
+    echo $msg
+end
+)
 "
         case '.reloadauthed'
             if not is_botowner
@@ -113,25 +123,35 @@ function read_authed_user
 end
 
 function set_authed_user
-    if string match -q -- $argv[1] $fwd_auth_user
+    if string match -q -- $ret_replied_msgger_id $fwd_auth_user
         return 1
     end
-    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $argv[1]"
-    echo -n $new_gist_content | gh gist edit $auth_gist_link -
-    echo $new_gist_content | source
+    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $ret_replied_msgger_id"
+    test "$ret_username" = null
+        and set -a new_gist_content "set -g fwd_user_name $fwd_user_name \"$ret_replied_first_name\""
+        or set -a new_gist_content "set -g fwd_user_name $fwd_user_name @$ret_replied_username"
+    for item in $new_gist_content; echo $item; end | gh gist edit $auth_gist_link -
+    for item in $new_gist_content; echo $item; end | source
     return 0
 end
 
 function remove_authed_user
-    if not string match -q -- $argv[1] $fwd_auth_user
+    if not string match -q -- $ret_replied_msgger_id $fwd_auth_user
         return 1
     end
-    set -l fwd_auth_user (echo -- "$fwd_auth_user" | string replace -- "$argv[1]" '')
-    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
-    echo -n $new_gist_content | gh gist edit $auth_gist_link -
-    echo $new_gist_content | source # Get rid of extra spaces
-    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user"
-    echo -n $new_gist_content | gh gist edit $auth_gist_link -
+    # Find out index
+    set -l index 1
+    for user in $fwd_auth_user
+        if string match -q -- $user $ret_replied_msgger_id
+            break
+        end
+        set index (math $index + 1)
+    end
+    set -ge fwd_auth_user[$index]
+    set -ge fwd_user_name[$index]
+    set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user" "set -g fwd_user_name $fwd_user_name"
+    for item in $new_gist_content; echo $item; end | gh gist edit $auth_gist_link -
+    for item in $new_gist_content; echo $item; end | source
     return 0
 end
 
