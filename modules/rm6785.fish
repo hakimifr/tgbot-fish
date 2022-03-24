@@ -10,6 +10,7 @@ set -g __module_help_message "Irrelevant outside testing group\. Available comma
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
 `.auth` \-\> Authorize someone to use this module\.
 `.unauth` \-\> Remove someone's authorization of using this module\.
+`.reloadauthed` \-\> Reload authorized user, useful when you edit the gist\.
 
 Deprecated commands:
 `.postupdatesticker` \-\> Does the same as `.sticker`\.
@@ -82,7 +83,7 @@ function realme_rm --on-event testing_group_rm6785_ch
                 else
                     remove_authed_user "$ret_replied_msgger_id"
                         and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
-                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
+                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user wasn't authorized"
                 end
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
@@ -96,6 +97,14 @@ function realme_rm --on-event testing_group_rm6785_ch
 Authorized user to use `\\.post` and `\\.sticker`:
 $(for user in $mention_user; string replace -a '-' '\\-' $user; end)
 "
+        case '.reloadauthed'
+            if not is_botowner
+                err_not_botowner
+                return
+            end
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reading gist..."
+            read_authed_user
+            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Authorized user reloaded"
     end
 end
 
