@@ -45,7 +45,6 @@ function realme_rm --on-event testing_group_rm6785_ch
                             tg --cpmsg "$ret_chat_id" "$fwd_to" "$ret_replied_msg_id"
                             tg --editmsg "$ret_chat_id" "$sent_msg_id" Posted
                         end
-                    else
                     end
                     return
                 end
