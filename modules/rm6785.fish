@@ -65,8 +65,8 @@ function realme_rm --on-event testing_group_rm6785_ch
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
                     set_authed_user
-                        and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
-                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
+                    and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
+                    or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
                 end
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
@@ -82,8 +82,8 @@ function realme_rm --on-event testing_group_rm6785_ch
                     tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
                 else
                     remove_authed_user
-                        and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
-                        or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user wasn't authorized"
+                    and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
+                    or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user wasn't authorized"
                 end
             else
                 tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
@@ -128,10 +128,14 @@ function set_authed_user
     end
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user $ret_replied_msgger_id"
     test "$ret_username" = null
-        and set -a new_gist_content "set -g fwd_user_name $fwd_user_name \"$ret_replied_first_name\""
-        or set -a new_gist_content "set -g fwd_user_name $fwd_user_name @$ret_replied_username"
-    for item in $new_gist_content; echo $item; end | gh gist edit $auth_gist_link -
-    for item in $new_gist_content; echo $item; end | source
+    and set -a new_gist_content "set -g fwd_user_name $fwd_user_name \"$ret_replied_first_name\""
+    or set -a new_gist_content "set -g fwd_user_name $fwd_user_name @$ret_replied_username"
+    for item in $new_gist_content
+        echo $item
+    end | gh gist edit $auth_gist_link -
+    for item in $new_gist_content
+        echo $item
+    end | source
     return 0
 end
 
@@ -150,8 +154,12 @@ function remove_authed_user
     set -ge fwd_auth_user[$index]
     set -ge fwd_user_name[$index]
     set -l new_gist_content "set -g fwd_auth_user $fwd_auth_user" "set -g fwd_user_name $fwd_user_name"
-    for item in $new_gist_content; echo $item; end | gh gist edit $auth_gist_link -
-    for item in $new_gist_content; echo $item; end | source
+    for item in $new_gist_content
+        echo $item
+    end | gh gist edit $auth_gist_link -
+    for item in $new_gist_content
+        echo $item
+    end | source
     return 0
 end
 
