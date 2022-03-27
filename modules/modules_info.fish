@@ -3,7 +3,6 @@
 set -g __module_name "Modules info (modules_info.fish)"
 set -g __module_description "Module to view an invidual module info."
 set -g __module_version 69
-set -g __module_events info
 set -g __module_functions module_info
 set -g __module_help_message "$(string replace '.' '\\.' $__module_description)
 `.modinfo modulename` \-\> View module info\.
@@ -26,7 +25,6 @@ Module name: $__module_name
 Module description: $__module_description
 Module version: $__module_version
 Module help message: Use .modhelp modulename to view individual module help message.
-Module events: $__module_events
 Module functions: $__module_functions
 "
             end
@@ -96,7 +94,6 @@ end
 function module_info::cleanup
     set -ge __module_name
     set -ge __module_load
-    set -ge __module_events
     set -ge __module_functions
     set -ge __module_description
     set -ge __module_help_message
