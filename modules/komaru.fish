@@ -77,7 +77,10 @@ function reply_file
     set -l chat_id $argv[1]
     set -l message_id $argv[2]
     set -l file_id $argv[3]
-    curl -s $API/sendDocument -d "chat_id=$chat_id" -d "message_id=$message_id" -d "document=$file_id" | jq . >$curl_out
+    pr_debug komaru "chat ID: $chat_id"
+    pr_debug komaru "msg ID: $message_id"
+    pr_debug komaru "file ID: $file_id"
+    curl -s $API/sendDocument -d "chat_id=$chat_id" -d "reply_to_message_id=$message_id" -d "document=$file_id" | jq .
 end
 
 function komaru_init
