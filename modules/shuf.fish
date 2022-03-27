@@ -3,7 +3,6 @@
 set -g __module_name "Shuffler"
 set -g __module_description "Shuffle a replied message"
 set -g __module_version 1
-set -g __module_events shuffler
 set -g __module_functions shuffle
 set -g __module_help_message "\
 $__module_description
