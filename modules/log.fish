@@ -3,12 +3,11 @@
 set -g __module_name "ADB logs (log.fish)"
 set -g __module_description "Easily take logs from telegram"
 set -g __module_version 69
-set -g __module_events adb_log_listener
 set -g __module_functions log "log.for.five.sec" "log.purge" "log.upload" "log.gen.gist" "log.editmsg" "log.date" "log.scrub.gist"
 set -g __module_help_message "Irrelevant to other than bot owner\. Available commands:
 `.log logtype` \-\> Take ADB logcat\."
 
-function log --on-event adb_log_listener
+function log --on-event modules_trigger
     log.scrub.gist
     switch $ret_lowered_msg_text
         case '.log*'

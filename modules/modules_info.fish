@@ -8,7 +8,7 @@ set -g __module_help_message "$(string replace '.' '\\.' $__module_description)
 `.modinfo modulename` \-\> View module info\.
 `.modcat modulename` \-\> View a module content\."
 
-function module_info --on-event info
+function module_info --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.modinfo*'
             if test -z (string replace -r '^.modinfo' '' $ret_lowered_msg_text)

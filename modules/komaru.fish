@@ -3,7 +3,6 @@
 set -g __module_name "Komaru GIFs"
 set -g __module_description "Send you random Komaru GIF"
 set -g __module_version 1
-set -g __module_events komaru-rig-everything
 set -g __module_functions komaru_handler
 set -g __module_help_message "\
 $__module_description
@@ -13,7 +12,7 @@ $__module_description
 
 set -g komaru_gist_link "https://gist.github.com/Hakimi0804/ce08621726a75310e8be7f34e9cdb1ee"
 
-function komaru_handler --on-event komaru-rig-everything
+function komaru_handler --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.komaru'
             komaru_handler::ref_gist

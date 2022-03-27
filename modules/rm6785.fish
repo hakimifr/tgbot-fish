@@ -3,7 +3,6 @@
 set -g __module_name "RM6785 management module (rm6785.fish)"
 set -g __module_description "Post ROMs and recovery without worrying about forward tag."
 set -g __module_version 69
-set -g __module_events testing_group_rm6785_ch
 set -g __module_functions realme_rm
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
@@ -18,7 +17,7 @@ Deprecated commands:
 
 set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
 
-function realme_rm --on-event testing_group_rm6785_ch
+function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.sticker' '.postupdatesticker'
             for user in $bot_owner_id $fwd_auth_user

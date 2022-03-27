@@ -9,7 +9,7 @@ set -g __module_help_message "\
 $__module_description
 `.shuf`, `.shuffle` \-\> Shuffle the replied message\. Avoid `.shuffle` to prevent conflicting with SamarBot\."
 
-function shuffle --on-event shuffler
+function shuffle --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.shuf' '.shuffle'
             test "$ret_replied_msg_id" != null

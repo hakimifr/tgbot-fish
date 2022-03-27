@@ -3,13 +3,12 @@
 set -g __module_name "Misc useless stuffs (fun.fish)"
 set -g __module_description "Useless commands like gay and sexy. lol."
 set -g __module_version 69
-set -g __module_events telegram-me
 set -g __module_functions telegram
 set -g __module_help_message "Bored? Try this module\!
 `/gay` \-\> Determine your gayness\.
 `/sexy`, `.sexy` \-\> Determine your sexiness\."
 
-function telegram --on-event telegram-me
+function telegram --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '*t.me*'
             set -l new_message (string replace 't.me' 'telegram.dog' $ret_msg_text)
