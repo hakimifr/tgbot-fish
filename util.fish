@@ -66,6 +66,7 @@ function update -d "Get updates"
         set -g ret_chat_id (echo "$fetch" | jq '.message.chat.id')
         set -g msgger (echo "$fetch" | jq '.message.from.id')
         set -g ret_file_id (echo "$fetch" | jq -r '.message.document.file_id')
+        set -g ret_file_unique_id (echo "$fetch" | jq -r '.message.document.file_unique_id')
 
         # Names
         set -g ret_first_name (echo "$fetch" | jq -r '.message.from.first_name')
@@ -85,6 +86,7 @@ function update -d "Get updates"
         set -g ret_replied_msgger_id (echo "$fetch" | jq '.message.reply_to_message.from.id')
         set -g ret_replied_msg_text (echo "$fetch" | jq -r '.message.reply_to_message.text')
         set -g ret_replied_file_id (echo "$fetch" | jq -r '.message.reply_to_message.document.file_id')
+        set -g ret_replied_file_unique_id (echo "$fetch" | jq -r '.message.reply_to_message.document.file_unique_id')
 
         # Stickers
         set -g sticker_emoji (echo "$fetch" | jq -r '.message.sticker.emoji')
