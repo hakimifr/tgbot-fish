@@ -8,7 +8,8 @@ set -g __module_help_message "\
 $__module_description
 `.komaru` \-\> Return random Komaru GIF\.
 `.add` \-\> Add a Komaru GIF\. Reply to a message\. Automatic duplicate checks\.
-`.kdeterdup` \-\> Determine whether a GIF already exists in database aka duplicate\."
+`.kdeterdup` \-\> Determine whether a GIF already exists in database aka duplicate\.
+`.forceupdatedb` \-\> Force update komaru GIF list by setting last check time as expired\."
 
 set -g komaru_gist_link "https://gist.github.com/Hakimi0804/ce08621726a75310e8be7f34e9cdb1ee"
 
@@ -34,6 +35,22 @@ function komaru_handler --on-event modules_trigger
             komaru_handler::deter_dup
             and tg --editmsg "$ret_chat_id" "$sent_msg_id" "This GIF is not a duplicate."
             or tg --editmsg "$ret_chat_id" "$sent_msg_id" "This GIF is a duplicate."
+        case '.forceupdatedb'
+            if not is_botowner
+                err_not_botowner
+                return
+            end
+            set -l tmp_chat_id $ret_chat_id
+            set -g ret_chat_id 0 # Prevent refresh function from replying, we're gonna use our own
+            tg --replymsg "$tmp_chat_id" "$ret_msg_id" "Refreshing komaru database"
+
+            set -l new_time (math (cat modules/assets/komaru_metadata) - 2000) # 1800 is enough but WHY NOT righht
+            echo $new_time >modules/assets/komaru_metadata
+            komaru_handler::ref_gist
+            tg --editmsg "$tmp_chat_id" "$sent_msg_id" Refreshed
+
+            # Restore the variable, prevent breaking other modules
+            set -g ret_chat_id $tmp_chat_id
     end
 end
 
