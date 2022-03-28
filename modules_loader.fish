@@ -168,6 +168,7 @@ function __module_unload
             end
             set index (math $index + 1)
         end
+        functions -e $fn
     end
 
     rm -f metadata/$module_basename
