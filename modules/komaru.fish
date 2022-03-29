@@ -23,10 +23,10 @@ function komaru_handler --on-event modules_trigger
             test "$ret_replied_msg_id" != null
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
 
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "One moment"
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" "One moment, determining duplicate"
             komaru_handler::deter_dup
             and komaru_handler::add_gif "$ret_replied_file_id"
-            or tg --editmsg "$ret_chat_id" "$sent_msg_id" "This GIF is a duplicate."
+            or tg --editmsg "$ret_chat_id" "$sent_msg_id" "Duplicate check failed, This GIF is a duplicate."
         case '.kdeterdup'
             test "$ret_replied_msg_id" != null
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
@@ -69,7 +69,7 @@ function komaru_handler::add_gif
     echo "set -g komaru_id $komaru_id" >modules/assets/komaru-id.fish
     echo "set -g komaru_unique_id $komaru_unique_id" >>modules/assets/komaru-id.fish
     gh gist edit $komaru_gist_link - <modules/assets/komaru-id.fish
-    tg --editmsg "$ret_chat_id" "$sent_msg_id" "GIF added"
+    tg --editmsg "$ret_chat_id" "$sent_msg_id" "Duplicate check succeeded, GIF added"
 end
 
 function komaru_handler::ref_gist
