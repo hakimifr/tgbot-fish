@@ -28,7 +28,7 @@ function shuffle --on-event modules_trigger
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
 
             # Pick random words in the words list
-            set -l shuf_count (math (string split ' ' $ret_replied_msg_text | count) \* 2)
+            set -l shuf_count (math (string split ' ' $ret_replied_msg_text | count))
             set -l random_word_index (shuf -i 1-(count $shuf_words) -n$shuf_count)
             set -l random_words $shuf_words[$random_word_index]
             set -l pre_new_message_content (string split ' ' $ret_replied_msg_text) $random_words
