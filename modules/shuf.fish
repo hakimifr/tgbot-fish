@@ -45,8 +45,11 @@ end
 
 # Module initialisation
 pr_debug shuf "Loading words list"
-set -g shuf_words (curl -sL https://github.com/dwyl/english-words/raw/master/words_alpha.zip | funzip | tr -d '\r')
+#set -g shuf_words (curl -sL https://github.com/dwyl/english-words/raw/master/words_alpha.zip | funzip | tr -d '\r')
 # That file apparently contains carriage return, was figuring out for hours thinking fish is broken... -^^^^^^^^^^
 # Windows should never exist in this world...
+
+# That was not so fun, using my own word list
+gh gist view https://gist.github.com/ccc81bc4bdb5a73ee8bd7ff02f710fd6 | source
 
 pr_debug shuf "Loaded words list"
