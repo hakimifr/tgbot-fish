@@ -175,6 +175,30 @@ function err_not_botowner -d "Reply with a message stating they aren't the bot o
     tg --replymsg "$ret_chat_id" "$ret_msg_id" "You are not allowed to use this command."
 end
 
+function is_admin
+    set -q argv[1]
+    or return 2
+    set -q argv[2]
+    or return 2
+
+    set -l chat_id $argv[1]
+    set -l user_id $argv[2]
+    set -l user_is_admin false
+
+    set -l chat_admins (curl -s $API/getChatAdministrators -d chat_id=-1001155763792 | jq .result[].user.id)
+    for admin in $chat_admins
+        if test $admin = $user_id
+        set user_is_admin true
+        break
+    end
+
+    if test $user_is_admin = true
+        return 0
+    else
+        return 1
+    end
+end
+
 function __pr_gen
     set -l date (date +%H:%M:%S)
     echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]"
