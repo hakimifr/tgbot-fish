@@ -184,18 +184,24 @@ function is_admin
     set -l chat_id $argv[1]
     set -l user_id $argv[2]
     set -l user_is_admin false
+    pr_debug util "is_admin: Given chat id: $chat_id"
+    pr_debug util "is_admin: Given user id: $user_id"
 
     set -l chat_admins (curl -s $API/getChatAdministrators -d chat_id=$chat_id | jq .result[].user.id)
     for admin in $chat_admins
+        pr_debug util "is_admin: for loops iterate: $admin"
         if test $admin = $user_id
+            pr_debug util "is_admin match found: $admin"
             set user_is_admin true
             break
         end
     end
 
     if test $user_is_admin = true
+        pr_debug util "is_admin: User is admin, returning 0"
         return 0
     else
+        pr_debug util "is_admin: User is not admin, returning 1"
         return 1
     end
 end
