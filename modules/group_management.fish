@@ -33,8 +33,6 @@ function purge --on-event modules_trigger
                 # tg --delmsg $ret_chat_id $msg
             end
             wait
-            set -g curl_out $__prev_curl_out
-            set -ge __prev_curl_out
             tg --sendmsg "$ret_chat_id" "Purge completed."
     end
 end
