@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/fish
 
 set -g __module_name "Komaru GIFs"
 set -g __module_description "Send you random Komaru GIF"
