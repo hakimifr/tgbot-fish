@@ -56,44 +56,69 @@ function tg -d "Send message and more"
 end
 
 function update -d "Get updates"
-    set -g fetch (curl -s "$API/getUpdates" -d "offset=$update_id" -d "timeout=60" | jq '.result[]')
+    set -g fetch "$(curl -s $API/getUpdates -d offset=$update_id -d timeout=60 | jq '.result[]')" # Quote to prevent newline splitting
 
-    if test -n "$fetch"
+    if test -n $fetch
         set -g update_id (math $update_id + 1)
         # IDs
         set -g prev_update_id $update_id
-        set -g ret_msg_id (echo "$fetch" | jq '.message.message_id')
-        set -g ret_chat_id (echo "$fetch" | jq '.message.chat.id')
-        set -g msgger (echo "$fetch" | jq '.message.from.id')
-        set -g ret_file_id (echo "$fetch" | jq -r '.message.document.file_id')
-        set -g ret_file_unique_id (echo "$fetch" | jq -r '.message.document.file_unique_id')
+        set -g ret_msg_id (echo $fetch | jq '.message.message_id')
+        set -g ret_chat_id (echo $fetch | jq '.message.chat.id')
+        set -g msgger (echo $fetch | jq '.message.from.id')
+        set -g ret_file_id (echo $fetch | jq -r '.message.document.file_id')
+        set -g ret_file_unique_id (echo $fetch | jq -r '.message.document.file_unique_id')
 
         # Names
-        set -g ret_first_name (echo "$fetch" | jq -r '.message.from.first_name')
-        set -g ret_last_name (echo "$fetch" | jq -r '.message.from.last_name')
-        set -g ret_username (echo "$fetch" | jq -r '.message.from.username')
-        set -g ret_replied_first_name (echo "$fetch" | jq -r '.message.reply_to_message.from.first_name')
-        set -g ret_replied_last_name (echo "$fetch" | jq -r '.message.reply_to_message.from.last_name')
-        set -g ret_replied_username (echo "$fetch" | jq -r '.message.reply_to_message.from.username')
+        set -g ret_first_name (echo $fetch | jq -r '.message.from.first_name')
+        set -g ret_last_name (echo $fetch | jq -r '.message.from.last_name')
+        set -g ret_username (echo $fetch | jq -r '.message.from.username')
+        set -g ret_replied_first_name (echo $fetch | jq -r '.message.reply_to_message.from.first_name')
+        set -g ret_replied_last_name (echo $fetch | jq -r '.message.reply_to_message.from.last_name')
+        set -g ret_replied_username (echo $fetch | jq -r '.message.reply_to_message.from.username')
 
         # Strings
-        set -g ret_msg_text (echo "$fetch" | jq -r '.message.text')
-        set -g first_name (echo "$fetch" | jq -r '.message.first_name')
-        set -g username (echo "$fetch" | jq -r '.message.username')
+        set -g ret_msg_text (echo $fetch | jq -r '.message.text')
 
         # Replies
-        set -g ret_replied_msg_id (echo "$fetch" | jq '.message.reply_to_message.message_id')
-        set -g ret_replied_msgger_id (echo "$fetch" | jq '.message.reply_to_message.from.id')
-        set -g ret_replied_msg_text (echo "$fetch" | jq -r '.message.reply_to_message.text')
-        set -g ret_replied_file_id (echo "$fetch" | jq -r '.message.reply_to_message.document.file_id')
-        set -g ret_replied_file_unique_id (echo "$fetch" | jq -r '.message.reply_to_message.document.file_unique_id')
+        set -g ret_replied_msg_id (echo $fetch | jq '.message.reply_to_message.message_id')
+        set -g ret_replied_msgger_id (echo $fetch | jq '.message.reply_to_message.from.id')
+        set -g ret_replied_msg_text (echo $fetch | jq -r '.message.reply_to_message.text')
+        set -g ret_replied_file_id (echo $fetch | jq -r '.message.reply_to_message.document.file_id')
+        set -g ret_replied_file_unique_id (echo $fetch | jq -r '.message.reply_to_message.document.file_unique_id')
 
         # Stickers
-        set -g sticker_emoji (echo "$fetch" | jq -r '.message.sticker.emoji')
-        set -g sticker_file_id (echo "$fetch" | jq -r '.message.sticker.file_id')
-        set -g sticker_pack_name (echo "$fetch" | jq -r '.message.sticker.set_name')
+        set -g sticker_emoji (echo $fetch | jq -r '.message.sticker.emoji')
+        set -g sticker_file_id (echo $fetch | jq -r '.message.sticker.file_id')
+        set -g sticker_pack_name (echo $fetch | jq -r '.message.sticker.set_name')
 
+        set -g global_fetch $fetch # For use by modules, etc
         set -ge fetch
+
+
+        set -g ret_msg_id $ret_msg_id[1]
+        set -g ret_chat_id $ret_chat_id[1]
+        set -g msgger $msgger[1]
+        set -g ret_file_id $ret_file_id[1]
+        set -g ret_file_unique_id $ret_file_unique_id[1]
+
+        set -g ret_first_name $ret_first_name[1]
+        set -g ret_last_name $ret_last_name[1]
+        set -g ret_username $ret_username[1]
+        set -g ret_replied_first_name $ret_replied_first_name[1]
+        set -g ret_replied_last_name $ret_replied_last_name[1]
+        set -g ret_replied_username $ret_replied_username[1]
+
+        set -g ret_msg_text $ret_msg_text[1]
+
+        set -g ret_replied_msg_id $ret_replied_msg_id[1]
+        set -g ret_replied_msgger_id $ret_replied_msgger_id[1]
+        set -g ret_replied_msg_text $ret_replied_msg_text[1]
+        set -g ret_replied_file_id $ret_replied_file_id[1]
+        set -g ret_replied_file_unique_id $ret_replied_file_unique_id[1]
+
+        set -g sticker_emoji $sticker_emoji[1]
+        set -g sticker_file_id $sticker_file_id[1]
+        set -g sticker_pack_name $sticker_pack_name[1]
     end
 end
 
