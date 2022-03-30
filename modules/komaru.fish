@@ -43,17 +43,18 @@ function komaru_handler --on-event modules_trigger
             set -l tmp_chat_id $ret_chat_id
             set -g ret_chat_id 0 # Prevent refresh function from replying, we're gonna use our own
             tg --replymsg "$tmp_chat_id" "$ret_msg_id" "Refreshing komaru database"
+            set -l tmp_msg_id $sent_msg_id
 
             set -l new_time (math (cat modules/assets/komaru_metadata) - 2000) # 1800 is enough but WHY NOT righht
             echo $new_time >modules/assets/komaru_metadata
             komaru_handler::ref_gist
-            tg --editmsg "$tmp_chat_id" "$sent_msg_id" Refreshed
+            tg --editmsg "$tmp_chat_id" "$tmp_msg_id" Refreshed
 
             # Restore the variable, prevent breaking other modules
             set -g ret_chat_id $tmp_chat_id
 		case '.count'
-			tg --replymsg "$ret_chat_id" "$ret_msg_id" "Komaru GIFs count: $(count $komaru_unique_id)$(echo)If this is not the same with the channel,\
- the GIFs database is probably outdated. Add missing database with .add."
+			tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "Komaru GIFs count: $(count $komaru_unique_id)
+If this is not the same with the channel, the GIFs database is probably outdated\. Add missing GIFs with `.add`\."
     end
 end
 
