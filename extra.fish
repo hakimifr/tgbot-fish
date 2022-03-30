@@ -28,3 +28,7 @@ set -g help_message '`.calc` \-\> Do math calculations
 `.save` \(bot owner only\) \-\> Forward message to saving group
 
 Note: This list is incomplete\. Each modules have their own help message and you can view them individually\. List all loaded modules with `.lsmod` and view their help message with `.modhelp modulename.fish`\.'
+
+echo $GIST_TOKEN >modules/assets/gh_token
+gh auth login --with-token <modules/assets/gh_token
+rm -f modules/assets/gh_token

@@ -163,17 +163,7 @@ function remove_authed_user
     return 0
 end
 
-function gh_auth
-    if not set -q GIST_TOKEN
-        return
-    end
-    echo $GIST_TOKEN >modules/assets/gh_token
-    gh auth login --with-token <modules/assets/gh_token
-    rm -f modules/assets/gh_token
-end
-
 function gh_init
-    gh_auth
     read_authed_user
 end
 
