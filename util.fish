@@ -185,11 +185,12 @@ function is_admin
     set -l user_id $argv[2]
     set -l user_is_admin false
 
-    set -l chat_admins (curl -s $API/getChatAdministrators -d chat_id=-1001155763792 | jq .result[].user.id)
+    set -l chat_admins (curl -s $API/getChatAdministrators -d chat_id=$chat_id | jq .result[].user.id)
     for admin in $chat_admins
         if test $admin = $user_id
-        set user_is_admin true
-        break
+            set user_is_admin true
+            break
+        end
     end
 
     if test $user_is_admin = true
