@@ -15,29 +15,15 @@ function shuffle --on-event modules_trigger
             test "$ret_replied_msg_id" != null
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
 
-            set -l message_split (string split ' ' $ret_replied_msg_text)
-            set -l message_index (shuf -i 1-(count $message_split))
-            set -l new_message
-            for i in $message_index
-                set -a new_message $message_split[$i]
-            end
-
+            set -l new_message (string split ' ' $ret_replied_msg_text | shuf)
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "$new_message"
         case '.insert'
             test "$ret_replied_msg_id" != null
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
 
             # Pick random words in the words list
-            set -l shuf_count (math (string split ' ' $ret_replied_msg_text | count))
-            set -l random_word_index (shuf -i 1-(count $shuf_words) -n$shuf_count)
-            set -l random_words $shuf_words[$random_word_index]
-            set -l pre_new_message_content (string split ' ' $ret_replied_msg_text) $random_words
-
-            set -l new_message_content
-            set -l randomised_index (shuf -i 1-(count $pre_new_message_content))
-            for index in $randomised_index
-                set -a new_message_content $pre_new_message_content[$index]
-            end
+            set -l random_words (string split ' ' $shuf_words | shuf -n(string split ' ' $ret_replied_msg_text | count))
+            set -l new_message_content (string split ' ' $random_words $ret_replied_msg_text | shuf)
 
             tg --replymsg "$ret_chat_id" "$ret_msg_id" "$new_message_content"
     end
