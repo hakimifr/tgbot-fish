@@ -1,15 +1,11 @@
 FROM fedora:latest
 
 # Install packages
-RUN dnf install -y python3-devel jq aria2 pv openssl neofetch curl-devel glib-devel openssl-devel python3 curl bash which zip git nano file glib2
-RUN dnf install -y make g++ wget asciidoc
-RUN dnf install -y coreutils
+RUN dnf install -y python3-devel jq aria2 pv openssl neofetch curl-devel glib-devel openssl-devel python3 curl bash which zip git nano file glib2 \
+	make g++ wget asciidoc coreutils dnf-plugins-core gh netcat zip unzip
 RUN dnf install -y dnf-plugins-core
 RUN dnf -y copr enable ignatenkobrain/fish
 RUN dnf install -y fish
-RUN dnf install -y gh
-RUN dnf install -y netcat
-RUN dnf install -y zip unzip
 RUN dnf upgrade -y
 
 # Use rpmfusion ffmpeg
