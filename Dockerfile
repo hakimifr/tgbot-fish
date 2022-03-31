@@ -4,7 +4,6 @@ FROM fedora:latest
 RUN echo "max_parallel_downloads=20" >> /etc/dnf/dnf.conf
 RUN dnf install -y python3-devel jq aria2 pv openssl neofetch curl-devel glib-devel openssl-devel python3 curl bash which zip git nano file glib2 \
 	make g++ wget asciidoc coreutils dnf-plugins-core gh netcat zip unzip
-RUN dnf install -y dnf-plugins-core
 RUN dnf -y copr enable ignatenkobrain/fish
 RUN dnf install -y fish
 RUN dnf upgrade -y
