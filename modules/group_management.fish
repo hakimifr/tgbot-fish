@@ -25,6 +25,7 @@ function purge --on-event modules_trigger
             or tg --editmsg $ret_chat_id $sent_msg_id "Reply to a message please" && return
 
             tg --editmsg $ret_chat_id $sent_msg_id Purging
+            set -l purge_start_time (date +%s.%N)
             for msg in (seq $ret_replied_msg_id $sent_msg_id)
                 fish -c "
                     set -g bot_owner_id -1001767564202
@@ -35,7 +36,9 @@ function purge --on-event modules_trigger
                 # tg --delmsg $ret_chat_id $msg
             end
             wait
-            tg --sendmsg $ret_chat_id "Purge completed."
+            set -l purge_end_time (date +%s.%N)
+            set -l purge_diff_time (math $purge_end_time - $purge_start_time)
+            tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)"
     end
 end
 
