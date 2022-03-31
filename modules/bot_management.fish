@@ -12,7 +12,7 @@ if test "$bot_restarted" = true
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
     set -g update_id (math $update_id + 1)
-    tg --editmsg "$tmp_ret_chat_id" "$tmp_sent_msg_id" "Bot restarted"
+    tg --editmsg $tmp_ret_chat_id $tmp_sent_msg_id "Bot restarted"
     set -ge tmp_ret_chat_id
     set -ge tmp_sent_msg_id
 end
@@ -27,7 +27,7 @@ function bot_management --on-event modules_trigger
             if test "$bot_restarted" = true
                 set -ge bot_restarted
             else
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Restarting bot"
+                tg --replymsg $ret_chat_id $ret_msg_id "Restarting bot"
                 set -gx bot_restarted true
                 set -gx tmp_ret_chat_id $ret_chat_id
                 set -gx tmp_sent_msg_id $sent_msg_id
@@ -42,10 +42,10 @@ function bot_management --on-event modules_trigger
             for module in (find metadata -type f -iname '*.fish')
                 __module_unload $module
             end
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reloading all modules"
+            tg --replymsg $ret_chat_id $ret_msg_id "Reloading all modules"
             set -ge modules_events
             set -ge modules_functions
             load_modules
-            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Modules reloaded"
+            tg --editmsg $ret_chat_id $sent_msg_id "Modules reloaded"
     end
 end

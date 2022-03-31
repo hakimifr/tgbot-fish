@@ -15,9 +15,9 @@ function log --on-event modules_trigger
                 err_not_botowner
             end
             set -l log_type (string replace -r '.log ' '' $ret_lowered_msg_text)
-            rm -f "$HOME/logs/adb_logcat.txt"
-            rm -f "$HOME/logs/adb_logcat_all.txt"
-            rm -f "$HOME/logs/adb_logcat_radio.txt"
+            rm -f $HOME/logs/adb_logcat.txt
+            rm -f $HOME/logs/adb_logcat_all.txt
+            rm -f $HOME/logs/adb_logcat_radio.txt
 
             log.for.five.sec $log_type
     end
@@ -26,10 +26,10 @@ end
 function log.for.five.sec
     set -l log_type $argv[1]
     set -g n \n
-    if test "$log_type" = ".log"
+    if test "$log_type" = .log
         set log_type normal
     end
-    tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "Progress$n"
+    tg --replymarkdownv2msg $ret_chat_id $ret_msg_id "Progress$n"
     set -ga log_progress "Progress$n"
     set -l date (log.date)
     set -ga log_progress "`$date` \\- Waiting for device$n"
@@ -75,7 +75,7 @@ function log.upload
     set -l date (log.date)
     set -ga log_progress "`$date` \\- Uploading $esc_file_name$n"
     log.editmsg
-    curl "$API/sendDocument" -F "chat_id=$RET_CHAT_ID" -F document=@"$file_name"
+    curl $API/sendDocument -F chat_id=$ret_chat_id -F document=@$file_name
     log.gen.gist $file_name
 end
 
@@ -94,12 +94,12 @@ function log.gen.gist
 end
 
 function log.editmsg
-    curl -s "$API/editMessageText" \
-        -d "chat_id=$ret_chat_id" \
-        -d "message_id=$sent_msg_id" \
-        -d "text=$log_progress" \
-        -d "parse_mode=MarkdownV2" \
-        -d "disable_web_page_preview=true"
+    curl -s $API/editMessageText \
+        -d chat_id=$ret_chat_id \
+        -d message_id=$sent_msg_id \
+        -d text=$log_progress \
+        -d parse_mode=MarkdownV2 \
+        -d disable_web_page_preview=true
 end
 
 function log.date

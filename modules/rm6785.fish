@@ -22,35 +22,35 @@ function realme_rm --on-event modules_trigger
         case '.sticker' '.postupdatesticker'
             for user in $bot_owner_id $fwd_auth_user
                 if test "$msgger" = "$user"
-                    if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
-                        tg --replymsg "$ret_chat_id" "$ret_msg_id" "Hold on..."
-                        tg --sendsticker "$fwd_to" "$rm6785_update_sticker"
-                        tg --editmsg "$ret_chat_id" "$sent_msg_id" "Sticker sent"
+                    if string match -qe -- $ret_chat_id $fwd_approved_chat_id
+                        tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+                        tg --sendsticker $fwd_to $rm6785_update_sticker
+                        tg --editmsg $ret_chat_id $sent_msg_id "Sticker sent"
                     else
-                        tg --replymsg "$ret_chat_id" "$ret_msg_id" "You are not allowed to use this command outside testing group"
+                        tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
                     end
                     return
                 end
             end
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to use this command"
+            tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to use this command"
         case '.post' '.fwdpost'
             for user in $bot_owner_id $fwd_auth_user
                 if test "$msgger" = "$user"
-                    if string match -qe -- "$ret_chat_id" "$fwd_approved_chat_id"
+                    if string match -qe -- $ret_chat_id $fwd_approved_chat_id
                         if test "$ret_replied_msg_id" = null
-                            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please"
+                            tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                         else
-                            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Hold on..."
-                            tg --cpmsg "$ret_chat_id" "$fwd_to" "$ret_replied_msg_id"
-                            tg --editmsg "$ret_chat_id" "$sent_msg_id" Posted
+                            tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+                            tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                            tg --editmsg $ret_chat_id $sent_msg_id Posted
                         end
                     else
-                        tg --replymsg "$ret_chat_id" "$ret_msg_id" "You are not allowed to use this command outside testing group"
+                        tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
                     end
                     return
                 end
             end
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
+            tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.auth'
             set -l authorized false
             for user in $bot_owner_id $fwd_auth_user
@@ -59,34 +59,34 @@ function realme_rm --on-event modules_trigger
                     break
                 end
             end
-            if test $authorized = true
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Authorizing that user"
-                if test "$ret_replied_msg_id" = null
-                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
+            if test "$authorized" = true
+                tg --replymsg $ret_chat_id $ret_msg_id "Authorizing that user"
+                if test $ret_replied_msg_id = null
+                    tg --editmsg $ret_chat_id $sent_msg_id "Reply to a user plox"
                 else
                     set_authed_user
-                    and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now authorized, enjoy"
-                    or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is already authorized"
+                    and tg --editmsg $ret_chat_id $sent_msg_id "That user is now authorized, enjoy"
+                    or tg --editmsg $ret_chat_id $sent_msg_id "That user is already authorized"
                 end
             else
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
+                tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
             end
         case '.unauth'
             set -l authorized false
             if test "$msgger" = "$bot_owner_id"
                 set authorized true
             end
-            if test $authorized = true
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "Unauthorizing that user that user"
+            if test "$authorized" = true
+                tg --replymsg $ret_chat_id $ret_msg_id "Unauthorizing that user that user"
                 if test "$ret_replied_msg_id" = null
-                    tg --editmsg "$ret_chat_id" "$sent_msg_id" "Reply to a user plox"
+                    tg --editmsg $ret_chat_id $sent_msg_id "Reply to a user plox"
                 else
                     remove_authed_user
-                    and tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user is now unauthorized, no more .post and .sticker for them."
-                    or tg --editmsg "$ret_chat_id" "$sent_msg_id" "That user wasn't authorized"
+                    and tg --editmsg $ret_chat_id $sent_msg_id "That user is now unauthorized, no more .post and .sticker for them."
+                    or tg --editmsg $ret_chat_id $sent_msg_id "That user wasn't authorized"
                 end
             else
-                tg --replymsg "$ret_chat_id" "$ret_msg_id" "You're not allowed to do this bsdk"
+                tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
             end
         case '.lsauthed'
             set -l auth_message
@@ -99,7 +99,7 @@ function realme_rm --on-event modules_trigger
                 end
                 set index (math $index + 1)
             end
-            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "
+            tg --replymarkdownv2msg $ret_chat_id $ret_msg_id "
 Authorized user to use `.post` and `.sticker`:
 $(
 for msg in $auth_message
@@ -112,9 +112,9 @@ end
                 err_not_botowner
                 return
             end
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reading gist..."
+            tg --replymsg $ret_chat_id $ret_msg_id "Reading gist..."
             read_authed_user
-            tg --editmsg "$ret_chat_id" "$sent_msg_id" "Authorized user reloaded"
+            tg --editmsg $ret_chat_id $sent_msg_id "Authorized user reloaded"
     end
 end
 

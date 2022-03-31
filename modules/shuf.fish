@@ -12,20 +12,20 @@ $__module_description
 function shuffle --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.shuf' '.shuffle'
-            test "$ret_replied_msg_id" != null
-            or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
+            test $ret_replied_msg_id != null
+            or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
             set -l new_message (string split ' ' $ret_replied_msg_text | shuf)
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "$new_message"
+            tg --replymsg $ret_chat_id $ret_msg_id $new_message
         case '.insert'
-            test "$ret_replied_msg_id" != null
-            or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
+            test $ret_replied_msg_id != null
+            or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
             # Pick random words in the words list
             set -l random_words (string split ' ' $shuf_words | shuf -n(string split ' ' $ret_replied_msg_text | count))
             set -l new_message_content (string split ' ' $random_words $ret_replied_msg_text | shuf)
 
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "$new_message_content"
+            tg --replymsg $ret_chat_id $ret_msg_id $new_message_content
     end
 end
 

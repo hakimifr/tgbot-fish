@@ -20,7 +20,7 @@ else
 end
 
 test $command_failed = true
-and tg --replymsg "$chat_id" "$msg_id" "Command exited with status non-zero (failed), output:
+and tg --replymsg $chat_id $msg_id "Command exited with status non-zero (failed), output:
 $command_output"
-or tg --replymsg "$chat_id" "$msg_id" "Command exited with status zero (success), output:
+or tg --replymsg $chat_id $msg_id "Command exited with status zero (success), output:
 $command_output"

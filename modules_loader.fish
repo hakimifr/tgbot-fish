@@ -91,12 +91,12 @@ function __module_load
         # would break
 
         # The same for functions
-        if test -n "$fatal_exception_function" # Remove all functions set by the broken module
+        if test -n $fatal_exception_function # Remove all functions set by the broken module
             for fnt in $__module_functions
                 set -l index 1
                 for fn in $modules_functions
-                    if test "$fnt" = "$fn"
-                        if test "$fn" != "$fatal_exception_function"
+                    if test $fnt = $fn
+                        if test "$fn" != $fatal_exception_function
                             set -ge modules_functions[$index]
                         end
                     end
