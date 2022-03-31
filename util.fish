@@ -86,9 +86,20 @@ function tg -d "Send message and more"
                 -d is_anonymous=false \
                 -d can_promote_members=false | jq -C . >$curl_out
         case --mute
-            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d '{"can_send_messages": false}' | jq -C . >$curl_out
+            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d \
+                permissions='{"can_send_messages": false}' | jq -C . >$curl_out
         case --unmute
-            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d '{"can_send_messages": true, "can_send_media_messages": true}' | jq -C . >$curl_out
+            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d \
+   permissions'={
+                    "can_send_messages": true,
+                    "can_send_media_messages": true,
+                    "can_send_polls": true,
+                    "can_send_other_messages": true,
+                    "can_add_web_page_previews": true,
+                    "can_change_info": true,
+                    "can_invite_users": true,
+                    "can_pin_messages": true
+                }' | jq -C . >$curl_out
     end
 end
 
