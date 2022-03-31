@@ -14,15 +14,17 @@ set -g __module_help_message "\
 function purge --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.purge'
+            tg --replymsg $ret_chat_id $ret_msg_id Verifying
+
             is_admin $ret_chat_id $msgger
-            or tg --replymsg $ret_chat_id $ret_msg_id "Error, you are not an admin." && return
+            or tg --editmsg $ret_chat_id $sent_msg_id "Error, you are not an admin." && return
             is_admin $ret_chat_id $this_bot_id
-            or tg --replymsg $ret_chat_id $ret_msg_id "Error, I am not an admin." && return
+            or tg --editmsg $ret_chat_id $sent_msg_id "Error, I am not an admin." && return
 
             test $ret_replied_msg_id != null
-            or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
+            or tg --editmsg $ret_chat_id $sent_msg_id "Reply to a message please" && return
 
-            tg --replymsg $ret_chat_id $ret_msg_id Purging
+            tg --editmsg $ret_chat_id $sent_msg_id Purging
             for msg in (seq $ret_replied_msg_id $sent_msg_id)
                 fish -c "
                     set -g bot_owner_id -1001767564202
