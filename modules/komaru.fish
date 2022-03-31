@@ -52,8 +52,8 @@ function komaru_handler --on-event modules_trigger
 
             # Restore the variable, prevent breaking other modules
             set -g ret_chat_id $tmp_chat_id
-		case '.count'
-			tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "Komaru GIFs count: $(count $komaru_unique_id)
+        case '.count'
+            tg --replymarkdownv2msg "$ret_chat_id" "$ret_msg_id" "Komaru GIFs count: $(count $komaru_unique_id)
 If this is not the same with the channel, the GIFs database is probably outdated\. Add missing GIFs with `.add`\."
     end
 end

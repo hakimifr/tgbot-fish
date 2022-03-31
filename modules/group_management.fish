@@ -22,7 +22,7 @@ function purge --on-event modules_trigger
             test $ret_replied_msg_id != null
             or tg --replymsg "$ret_chat_id" "$ret_msg_id" "Reply to a message please" && return
 
-            tg --replymsg "$ret_chat_id" "$ret_msg_id" "Purging"
+            tg --replymsg "$ret_chat_id" "$ret_msg_id" Purging
             for msg in (seq $ret_replied_msg_id $sent_msg_id)
                 fish -c "
                     set -g bot_owner_id -1001767564202
