@@ -66,7 +66,7 @@ while true
 [Latest canary]($canary)
         case '.neofetch'
             tg --replymsg $ret_chat_id $ret_msg_id "This may take a while as there's quite a few packages in this laptop..."
-            set -l neofetch_output (neofetch --stdout)
+            set -l neofetch_output "$(neofetch --stdout)"
             tg --editmsg $ret_chat_id $sent_msg_id $neofetch_output
         case '.save'
             if not is_botowner
