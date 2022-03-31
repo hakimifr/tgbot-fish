@@ -28,7 +28,7 @@ function purge --on-event modules_trigger
                     set -g bot_owner_id -1001767564202
                     source util.fish;
                     tg --delmsg $ret_chat_id $msg
-                "
+                " &
                 #   ^^ that set -g bot_owner_id is due to my if condition in .token.fish, you don't need it
                 # tg --delmsg $ret_chat_id $msg
             end
