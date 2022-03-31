@@ -38,6 +38,10 @@ while true
     run_modules
 
     switch $ret_lowered_msg_text
+        case '/start*'
+            set -l words bhai bro sir bhaiya bsdk bc ', sup'
+            set -l word (printf '%s\n' $words | shuf -n1)
+            tg --replymsg $ret_chat_id $ret_msg_text "Hello $word"
         case '/help*' '.help*'
             tg --replymarkdownv2msg $ret_chat_id $ret_msg_id $help_message # $help_message located on extra.fish
         case '/test*' '.test*'
@@ -62,8 +66,8 @@ while true
                     tr -d ' '
             )
             set -l canary https://raw.githubusercontent.com/topjohnwu/magisk-files/canary/app-debug.apk
-            tg --editmarkdownv2msg $ret_chat_id $sent_msg_id [Latest stable]($latest)
-[Latest canary]($canary)
+            tg --editmarkdownv2msg $ret_chat_id $sent_msg_id "[Latest stable]($latest)
+[Latest canary]($canary)"
         case '.neofetch'
             tg --replymsg $ret_chat_id $ret_msg_id "This may take a while as there's quite a few packages in this laptop..."
             set -l neofetch_output "$(neofetch --stdout)"
