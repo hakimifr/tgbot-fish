@@ -8,7 +8,7 @@ function round -d "round a number"
     end
     set -l float $argv[1]
     set -l decimal_point $argv[2]
-    printf "%.{$decimal_point}f" $float
+    printf %.{$decimal_point}f $float
 end
 
 set -g fwd_approved_chat_id \
