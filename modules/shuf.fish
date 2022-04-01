@@ -16,7 +16,7 @@ function shuffle --on-event modules_trigger
             or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
             set -l new_message (string split ' ' $ret_replied_msg_text | shuf)
-            tg --replymsg $ret_chat_id $ret_msg_id $new_message
+            tg --replymsg $ret_chat_id $ret_msg_id "$new_message" # Must be quoted, all element in the list needs to become 3rd arg
         case '.insert'
             test $ret_replied_msg_id != null
             or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
@@ -25,7 +25,7 @@ function shuffle --on-event modules_trigger
             set -l random_words (string split ' ' $shuf_words | shuf -n(string split ' ' $ret_replied_msg_text | count))
             set -l new_message_content (string split ' ' $random_words $ret_replied_msg_text | shuf)
 
-            tg --replymsg $ret_chat_id $ret_msg_id $new_message_content
+            tg --replymsg $ret_chat_id $ret_msg_id "$new_message_content" # Must be quoted too, just like .shuf
     end
 end
 
