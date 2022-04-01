@@ -3,7 +3,7 @@
 set -g __module_name "Komaru GIFs"
 set -g __module_description "Send you random Komaru GIF"
 set -g __module_version 1
-set -g __module_functions komaru_handler
+set -g __module_functions komaru_handler komaru_handler_channel_auto
 set -g __module_help_message "\
 $__module_description
 `.komaru` \-\> Return random Komaru GIF\.
@@ -56,6 +56,56 @@ function komaru_handler --on-event modules_trigger
             tg --replymarkdownv2msg $ret_chat_id $ret_msg_id "Komaru GIFs count: $(count $komaru_unique_id)
 If this is not the same with the channel, the GIFs database is probably outdated\. Add missing GIFs with `.add`\."
     end
+end
+
+function komaru_handler_channel_auto --on-event modules_trigger
+    # Setting vars, channel works differently
+    set -l channel_id (echo $global_fetch | jq .channel_post.chat.id)
+    set -l message_id (echo $global_fetch | jq .channel_post.message_id)
+    set -l file_unique_id (echo $global_fetch | jq -r .channel_post.document.file_unique_id)
+    set -l file_id (echo $global_fetch | jq -r .channel_post.document.file_id)
+
+    pr_debug komaru "Auto ch dedup: channel id - $channel_id"
+    pr_debug komaru "Auto ch dedup: file unique id - $file_unique_id"
+    pr_debug komaru "Auto ch dedup: message id - $message_id"
+
+    test "$channel_id" != -1001750281318
+    and return
+
+    test "$file_unique_id" = null
+    and return
+
+    # Temporarily set replied var to non-replied one, because komaru_handler::deter_dup uses replied one
+    # but we want to check non-replied one.
+    tg --replymsg $channel_id $message_id "Determining for duplicate"
+    set -l old_ret_replied_file_unique_id $ret_replied_file_unique_id
+    set -l old_ret_replied_file_id $ret_replied_file_id
+    set -g ret_replied_file_unique_id $file_unique_id
+    set -g ret_replied_file_id $file_id
+
+    komaru_handler::deter_dup
+    if test $status -eq 0
+        tg --editmsg $channel_id $sent_msg_id "Duplicate check succeeded. Adding GIF to database. Message will auto-delete in 3 sec"
+        fish -c "
+        source util.fish;
+        source .token.fish;
+        sleep 3;
+        tg --delmsg $channel_id $sent_msg_id;
+        " &
+    else
+        tg --editmsg $channel_id $sent_msg_id "Duplicate check failed, deleting GIF in 3 sec"
+        fish -c "
+        source util.fish
+        source .token.fish;
+        sleep 3;
+        tg --delmsg $channel_id $message_id
+        tg --delmsg $channel_id $sent_msg_id
+        " &
+    end
+
+    # Reset back the var
+    set -g ret_replied_file_unique_id $old_ret_replied_file_unique_id
+    set -g ret_replied_file_id $old_ret_replied_file_id
 end
 
 function komaru_handler::deter_dup
