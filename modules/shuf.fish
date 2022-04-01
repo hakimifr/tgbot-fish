@@ -7,7 +7,8 @@ set -g __module_functions shuffle
 set -g __module_help_message "\
 $__module_description
 `.shuf`, `.shuffle` \-\> Shuffle the replied message\. Avoid `.shuffle` to prevent conflicting with SamarBot\.
-`.insert` \-\> Insert random words and shuffle replied message\."
+`.insert` \-\> Insert random words and shuffle replied message\.
+`.sshuf`, `.supershuffle` \-\> Shuffle char\-by\-char\."
 
 function shuffle --on-event modules_trigger
     switch $ret_lowered_msg_text
@@ -26,6 +27,12 @@ function shuffle --on-event modules_trigger
             set -l new_message_content (string split ' ' $random_words $ret_replied_msg_text | shuf)
 
             tg --replymsg $ret_chat_id $ret_msg_id "$new_message_content" # Must be quoted too, just like .shuf
+        case '.sshuf' '.supershuffle'
+        test $ret_replied_msg_id != null
+        or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
+
+        set -l new_message (string split '' $ret_replied_msg_text | shuf)
+        tg --replymsg $ret_chat_id $ret_msg_id "$(printf '%s' $new_message)" # Same as above for quotation
     end
 end
 
