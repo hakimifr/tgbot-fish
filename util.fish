@@ -90,7 +90,7 @@ function tg -d "Send message and more"
                 permissions='{"can_send_messages": false}' | jq -C . >$curl_out
         case --unmute
             curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d \
-   permissions'={
+                permissions'={
                     "can_send_messages": true,
                     "can_send_media_messages": true,
                     "can_send_polls": true,

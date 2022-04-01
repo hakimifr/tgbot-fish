@@ -106,7 +106,7 @@ function purge --on-event modules_trigger
 end
 
 function verify
-    tg --replymsg $ret_chat_id $ret_msg_id "Verifying"
+    tg --replymsg $ret_chat_id $ret_msg_id Verifying
     test $ret_replied_msg_id != null
     or tg --editmsg $ret_chat_id $sent_msg_id "Reply to a message please" && return 1
 

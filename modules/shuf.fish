@@ -28,11 +28,11 @@ function shuffle --on-event modules_trigger
 
             tg --replymsg $ret_chat_id $ret_msg_id "$new_message_content" # Must be quoted too, just like .shuf
         case '.sshuf' '.supershuffle'
-        test $ret_replied_msg_id != null
-        or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
+            test $ret_replied_msg_id != null
+            or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
-        set -l new_message (string split '' $ret_replied_msg_text | shuf)
-        tg --replymsg $ret_chat_id $ret_msg_id "$(printf '%s' $new_message)" # Same as above for quotation
+            set -l new_message (string split '' $ret_replied_msg_text | shuf)
+            tg --replymsg $ret_chat_id $ret_msg_id "$(printf '%s' $new_message)" # Same as above for quotation
     end
 end
 
