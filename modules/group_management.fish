@@ -46,8 +46,8 @@ function purge --on-event modules_trigger
             set -l purge_diff_time (math $purge_end_time - $purge_start_time)
 
             empty .purge $ret_msg_text
-            and tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)"
-            or tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)
+            and tg --sendmsg $ret_chat_id "Purge completed. Purged $(math $sent_msg_id - $ret_replied_msg_id) messages in $(round $purge_diff_time 3)"
+            or tg --sendmsg $ret_chat_id "Purge completed. Purged $(math $sent_msg_id - $ret_replied_msg_id) messages in $(round $purge_diff_time 3)
 Reason: $(string replace -r '^.purge ' '' $ret_msg_text)"
 
         case '.pin*'
