@@ -34,6 +34,12 @@ function purge --on-event modules_trigger
                 " &
                 #   ^^ that set -g bot_owner_id is due to my if condition in .token.fish, you don't need it
                 # tg --delmsg $ret_chat_id $msg
+                if test (jobs | count) -ge 100 # Limit resource usage
+                    # wait # We're not gonna use this, since it will wait for all jobs
+                    while test (jobs | count) -gt 50
+                        # Do nothing
+                    end
+                end
             end
             wait
             set -l purge_end_time (date +%s.%N)
