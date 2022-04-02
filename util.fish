@@ -209,8 +209,12 @@ function is_admin
 end
 
 function __pr_gen
+    test -d logs
+    or mkdir logs
+
     set -l date (date +%H:%M:%S)
     echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]"
+    echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]" >>logs/(string lower $argv[1]).log
 end
 
 function pr_info
