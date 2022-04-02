@@ -13,7 +13,7 @@ set -g __module_help_message "\
 
 function purge --on-event modules_trigger
     switch $ret_lowered_msg_text
-        case '.purge'
+        case '.purge*'
             tg --replymsg $ret_chat_id $ret_msg_id Verifying
 
             is_admin $ret_chat_id $msgger
@@ -38,70 +38,111 @@ function purge --on-event modules_trigger
             wait
             set -l purge_end_time (date +%s.%N)
             set -l purge_diff_time (math $purge_end_time - $purge_start_time)
-            tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)"
-        case '.pin'
+
+            empty .purge $ret_msg_text
+            and tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)"
+            or tg --sendmsg $ret_chat_id "Purge completed. Took $(round $purge_diff_time 3)
+Reason: $(string replace -r '^.purge ' '' $ret_msg_text)"
+
+        case '.pin*'
             verify
             or return
 
             tg --pinmsg $ret_chat_id $ret_replied_msg_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Message pinned."
 
-        case '.unpin'
+            empty .pin $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Message pinned."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Message pinned.
+Reason: $(string replace -r '^.pin ' '' $ret_msg_text)"
+
+        case '.unpin*'
             verify
             or return
 
             tg --unpinmsg $ret_chat_id $ret_replied_msg_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Message unpinned."
 
-        case '.ban'
+            empty .unpin $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Message unpinned."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Message unpinned.
+Reason: $(string replace -r '^.unpin ' '' $ret_msg_text)"
+
+        case '.ban*'
             verify
             or return
 
             tg --ban $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Banned that user."
 
-        case '.unban'
+            empty .ban $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Banned that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Banned that user.
+Reason: $(string replace -r '^.ban ' '' $ret_msg_text)"
+
+        case '.unban*'
             verify
             or return
 
             tg --unban $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Unbanned that user."
 
-        case '.kick'
+            empty .unban $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Unbanned that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Unbanned that user.
+Reason: $(string replace -r '^.unban ' '' $ret_msg_text)"
+
+        case '.kick*'
             verify
             or return
 
             tg --ban $ret_chat_id $ret_replied_msgger_id
             tg --unban $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Kicked that user."
 
-        case '.mute'
+            empty .kick $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Kicked that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Kicked that user.
+ReasonL $(string replace -r '^.kick ' '' $ret_msg_text)"
+
+        case '.mute*'
             verify
             or return
 
             tg --mute $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Muted that user."
 
-        case '.unmute'
+            empty .mute $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Muted that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Muted that user.
+Reason: $(string replace -r '^.mute ' '' $ret_msg_text)"
+
+        case '.unmute*'
             verify
             or return
 
             tg --unmute $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "User unmuted."
 
-        case '.promote'
+            empty .unmute $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "User unmuted."
+            or tg --editmsg $ret_chat_id $sent_msg_id "User unmuted.
+Reason: $(string replace -r '^.unmute ' '' $ret_msg_text)"
+
+        case '.promote*'
             verify
             or return
 
             tg --promote $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Promoted that user."
 
-        case '.demote'
+            empty .promote $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Promoted that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Promoted that user.
+Reason: $(string replace -r '^.promote ' '' $ret_msg_text)"
+
+        case '.demote*'
             verify
             or return
 
             tg --demote $ret_chat_id $ret_replied_msgger_id
-            tg --editmsg $ret_chat_id $sent_msg_id "Demoted that user."
+
+            empty .demote $ret_msg_text
+            and tg --editmsg $ret_chat_id $sent_msg_id "Demoted that user."
+            or tg --editmsg $ret_chat_id $sent_msg_id "Demoted that user.
+Reason: $(string replace -r '^.demote ' '' $ret_msg_text)"
     end
 end
 
@@ -117,6 +158,18 @@ function verify
     or tg --editmsg $ret_chat_id $sent_msg_id "Error, I am not admin" && return 1
 
     return 0
+end
+
+function empty
+    # Args:
+    # 1 - What to replace; e.g .kick
+    # 2 - The string to check
+    test (count $argv) -eq 2
+    or pr_error group_management "Function empty: Incorrect number of arguments passed." && return 2
+
+    test -z (string replace -r "^$argv[1]" '' $argv[2])
+    and return 0
+    or return 1
 end
 
 # Init
