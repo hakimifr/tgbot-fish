@@ -65,6 +65,12 @@ function komaru_handler_channel_auto --on-event modules_trigger
     set -l file_unique_id (echo $global_fetch | jq -r .channel_post.document.file_unique_id)
     set -l file_id (echo $global_fetch | jq -r .channel_post.document.file_id)
 
+    # Just like util.fish
+    set -l channel_id $channel_id[1]
+    set -l message_id $message_id[1]
+    set -l file_unique_id $file_unique_id[1]
+    set -l file_id $file_id[1]
+
     pr_debug komaru "Auto ch dedup: channel id - $channel_id"
     pr_debug komaru "Auto ch dedup: file unique id - $file_unique_id"
     pr_debug komaru "Auto ch dedup: message id - $message_id"
