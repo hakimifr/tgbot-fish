@@ -13,11 +13,8 @@ RUN dnf install -y \
     https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 RUN dnf install -y \
     https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+RUN dnf install -y ffmpeg
 RUN dnf clean all
-
-# YTDL
-RUN wget -c https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl && \
-    chmod +x /usr/local/bin/youtube-dl
 
 # Python
 RUN python3 -m ensurepip \
