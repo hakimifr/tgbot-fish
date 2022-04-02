@@ -179,7 +179,7 @@ end
 function load_modules
     # Search for modules
     pr_info modules_loader "Searching for modules"
-    set -l modules (find modules -type f -iname '*.fish')
+    set -l modules (find modules -maxdepth 1 -type f -iname '*.fish')
 
     # Load them
     set -l skip false
