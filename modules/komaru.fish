@@ -92,6 +92,7 @@ function komaru_handler_channel_auto --on-event modules_trigger
     komaru_handler::deter_dup
     if test $status -eq 0
         tg --editmsg $channel_id $sent_msg_id "Duplicate check succeeded. Adding GIF to database. Message will auto-delete in 3 sec"
+        komaru_handler::add_gif
         fish -c "
         source util.fish;
         source .token.fish;
