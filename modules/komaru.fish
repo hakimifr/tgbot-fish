@@ -85,6 +85,9 @@ function komaru_handler_channel_auto --on-event modules_trigger
     test "$file_unique_id" = null
     and return
 
+    test -z "$file_unique_id"
+    and return
+
     # Temporarily set replied var to non-replied one, because komaru_handler::deter_dup uses replied one
     # but we want to check non-replied one.
     tg --replymsg $channel_id $message_id "Determining for duplicate"

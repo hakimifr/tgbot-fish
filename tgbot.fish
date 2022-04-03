@@ -94,4 +94,5 @@ while true
     end
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
+    set -ge global_fetch
 end
