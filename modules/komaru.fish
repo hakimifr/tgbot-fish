@@ -12,6 +12,7 @@ $__module_description
 `.forceupdatedb` \-\> Force update komaru GIF list by setting last check time as expired\."
 
 set -g komaru_gist_link "https://gist.github.com/Hakimi0804/ce08621726a75310e8be7f34e9cdb1ee"
+set -g pranaya_id 1036562579
 
 function komaru_handler --on-event modules_trigger
     switch $ret_lowered_msg_text
@@ -20,6 +21,9 @@ function komaru_handler --on-event modules_trigger
             komaru_handler::pick_random_komaru
             reply_file $ret_chat_id $ret_msg_id $random_komaru
         case '.add'
+            test "$msgger" != "$bot_owner_id" -a "$msgger" != "$pranaya_id"
+            and err_not_botowner && return
+
             test $ret_replied_msg_id != null
             or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
