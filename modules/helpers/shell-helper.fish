@@ -3,11 +3,8 @@
 set -g chat_id $argv[1]
 set -g msg_id $argv[2]
 
-# Although we pass $argv[3] as 1 arguments, let's make it so it accepts
-# all args if some dummy (which might be me) decides to split them later
-# (though we really shouldn't lol..)
 set -e argv[1 2]
-set -g cmds "$argv" # Quote, prevent splitting on newline
+set -g cmds "$argv"
 
 # Source util so we can reply
 source util.fish
