@@ -16,10 +16,8 @@ function purge --on-event modules_trigger
         case '.purge*'
             tg --replymsg $ret_chat_id $ret_msg_id Verifying
 
-            is_admin $ret_chat_id $msgger
-            or tg --editmsg $ret_chat_id $sent_msg_id "Error, you are not an admin." && return
-            is_admin $ret_chat_id $this_bot_id
-            or tg --editmsg $ret_chat_id $sent_msg_id "Error, I am not an admin." && return
+            verify
+            or return
 
             test $ret_replied_msg_id != null
             or tg --editmsg $ret_chat_id $sent_msg_id "Reply to a message please" && return
@@ -157,11 +155,10 @@ function verify
     test $ret_replied_msg_id != null
     or tg --editmsg $ret_chat_id $sent_msg_id "Reply to a message please" && return 1
 
-    is_admin $ret_chat_id $msgger
-    or tg --editmsg $ret_chat_id $sent_msg_id "Error, you are not an admin" && return 1
-
-    is_admin $ret_chat_id $this_bot_id
-    or tg --editmsg $ret_chat_id $sent_msg_id "Error, I am not admin" && return 1
+    if not is_admin $ret_chat_id $msgger $this_bot_id
+        tg --editmsg $ret_chat_id $sent_msg_id "Verification failed, either I or you (or both) is not an admin"
+        return 1
+    end
 
     return 0
 end
