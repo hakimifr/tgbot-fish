@@ -187,23 +187,31 @@ function err_not_botowner -d "Reply with a message stating they aren't the bot o
 end
 
 function is_admin
-    set -q argv[1]
-    or return 2
-    set -q argv[2]
+    test (count $argv) -ge 2
     or return 2
 
     set -l chat_id $argv[1]
-    set -l user_id $argv[2]
-    set -l user_is_admin false
+    set -l user_id $argv[2..]
+    set -l everyone_is_admin true
     pr_debug util "is_admin: Given chat id: $chat_id"
     pr_debug util "is_admin: Given user id: $user_id"
 
     set -l chat_admins (curl -s $API/getChatAdministrators -d chat_id=$chat_id | jq .result[].user.id)
-    if string match -q $user_id $chat_admins
-        pr_debug util "is_admin: User is admin, returning 0"
+
+    for user in $user_id
+        if contains -- $user $chat_admins
+            pr_debug util "is_admin: User $user is admin"
+        else
+            pr_debug util "is_admin: User $user is not admin"
+            set everyone_is_admin false
+        end
+    end
+
+    if test "$everyone_is_admin" = true
+        pr_debug "is_admin: Everyone is admin, returning 0"
         return 0
     else
-        pr_debug util "is_admin: User is not admin, returning 1"
+        pr_debug "is_admin: Not everyone is admin, returning 1"
         return 1
     end
 end
