@@ -33,6 +33,16 @@ function shuffle --on-event modules_trigger
 
             set -l new_message (string split '' $ret_replied_msg_text | shuf)
             tg --replymsg $ret_chat_id $ret_msg_id "$(printf '%s' $new_message)" # Same as above for quotation
+        case '.lsword*'
+            set -l split (string split ' ' $ret_lowered_msg_text)
+            set -l reply
+            if contains -- --pretty $split
+                set reply "$(printf '%s\n' $shuf_words)"
+            else
+                set reply $shuf_words
+            end
+
+            tg --replymsg $ret_chat_id $ret_msg_id "$reply"
     end
 end
 
