@@ -10,10 +10,6 @@ set -g __module_help_message "Bored? Try this module\!
 
 function telegram --on-event modules_trigger
     switch $ret_lowered_msg_text
-        case '*t.me*'
-            set -l new_message (string replace 't.me' 'telegram.dog' $ret_msg_text)
-            tg --replymsg $ret_chat_id $ret_msg_id "Automatic telegram.dog conversion
-$new_message"
         case '/gay*'
             tg --replymsg $ret_chat_id $ret_msg_id "Determining your gayness, please wait..."
             set -l level (shuf -i 0-165 -n1)
