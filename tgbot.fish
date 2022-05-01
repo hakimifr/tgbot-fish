@@ -15,10 +15,8 @@ set_color black
 echo -n $text
 set_color normal
 set count (echo $text | string split '' | count)
-for i in (seq (math $width - $count))
-    set_color -b brmagenta
-    echo -n ' '
-end
+set_color -b brmagenta
+string repeat -N -n(math $width - $count) ' '
 set_color normal
 echo
 set -e width count i text

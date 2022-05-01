@@ -9,9 +9,7 @@ end
 set_color -b brmagenta
 set_color black
 echo -ne "\rProceeding"
-for col in (seq (math $COLUMNS - (string split '' "Proceeding" | count)))
-    echo -n ' '
-end
+string repeat -N -n(math $COLUMNS - (string split '' "Proceeding" | count)) ' '
 set_color normal
 
 set scripts (find -type f -iname '*.fish')
