@@ -14,8 +14,6 @@ set -g __module_help_message "\
 function purge --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.purge*'
-            tg --replymsg $ret_chat_id $ret_msg_id Verifying
-
             verify
             or return
 
