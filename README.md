@@ -1,6 +1,8 @@
 # tgbot-fish
 Previous [tgbot](https://github.com/Hakimi0804/tgbot) is rewritten in fish. It is depracated.
 
+[![Deploy to heroku.](https://github.com/Hakimi0804/tgbot-fish/actions/workflows/docker-heroku.yml/badge.svg)](https://github.com/Hakimi0804/tgbot-fish/actions/workflows/docker-heroku.yml)
+
 ## Files and Folders in This Repo
 ```
 README.md               # This file
