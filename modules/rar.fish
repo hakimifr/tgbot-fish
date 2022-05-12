@@ -31,11 +31,11 @@ function rar --on-event modules_trigger
             set -l randfname file-(random).rar
 
             aria2c $file_path -o $tmpdir/$randfname
-            or __rar_err_handler && return
 
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
             cd $tmpdir
             unrar e (basename $randfname)
+            or __rar_err_handler && return
 
             rm -f $randfname
             tg --editmsg $ret_chat_id $sent_msg_id "Uploading"
