@@ -219,12 +219,12 @@ function is_admin
 end
 
 function __pr_gen
-    test -d logs
-    or mkdir logs
+    test -d $BOT_HOME/logs
+    or mkdir $BOT_HOME/logs
 
     set -l date (date +%H:%M:%S)
     echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]"
-    echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]" >>logs/(string lower $argv[1]).log
+    echo -e "$date - ($argv[1]) - [$argv[2]] - $argv[3]" >>$BOT_HOME/logs/(string lower $argv[1]).log
 end
 
 function pr_info
