@@ -7,6 +7,8 @@ if not set -q curl_out # Output of curl for tg() function
     set -g curl_out /dev/null
 end
 
+set -g BOT_HOME $PWD
+
 set API https://api.telegram.org/bot$TOKEN
 function tg -d "Send message and more"
     switch $argv[1]
