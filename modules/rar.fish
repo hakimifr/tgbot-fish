@@ -35,7 +35,7 @@ function rar --on-event modules_trigger
 
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
             cd $tmpdir
-            unrar e (basename $randfname)
+            unrar e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler && return
 
             rm -f $randfname
@@ -50,6 +50,7 @@ end
 function __rar_err_handler -S
     tg --editmsg $ret_chat_id $sent_msg_id "Failed to extract archive"
     __rar_cleanup
+    cd $origpath
 end
 
 function __rar_cleanup -S
