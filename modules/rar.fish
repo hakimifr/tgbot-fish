@@ -22,6 +22,7 @@ function rar --on-event modules_trigger
                 jq -r .result.file_path
         )
             set file_path https://api.telegram.org/file/bot$TOKEN/$file_path
+            pr_debug rar "file_path: $file_path"
 
             tg --editmsg $ret_chat_id $sent_msg_id Downloading
 
