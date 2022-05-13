@@ -28,6 +28,7 @@ function rar --on-event modules_trigger
             pr_debug rar "Downloading file"
             tg --editmsg $ret_chat_id $sent_msg_id Downloading
 
+            set -lx TMPDIR /tmp
             set -l start_time (date +%s.%N)
             set -l tmpdir (mktemp -d)
             set -l origpath $PWD
