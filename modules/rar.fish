@@ -16,6 +16,7 @@ function rar --on-event modules_trigger
                 return
             end
 
+            pr_debug rar "Preparing links"
             tg --replymsg $ret_chat_id $ret_msg_id Preparing
             set -l file_path (
             curl -s $API/getFile -d chat_id=$ret_chat_id -d file_id=$ret_replied_file_id |
@@ -24,6 +25,7 @@ function rar --on-event modules_trigger
             set file_path https://api.telegram.org/file/bot$TOKEN/$file_path
             pr_debug rar "file_path: $file_path"
 
+            pr_debug rar "Downloading file"
             tg --editmsg $ret_chat_id $sent_msg_id Downloading
 
             set -l start_time (date +%s.%N)
@@ -33,12 +35,18 @@ function rar --on-event modules_trigger
 
             aria2c $file_path -o $tmpdir/$randfname
 
+            pr_debug rar "Extracting file"
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
             cd $tmpdir
+            pr_debug rar "--- rar ---
+file: $(basename $randfname)
+directory contents:
+$(ls)"
             unrar e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler && return
 
             rm -f $randfname
+            pr_debug rar "Uploading files"
             tg --editmsg $ret_chat_id $sent_msg_id "Uploading"
             __rar_upload (find -type f)
             __rar_cleanup
