@@ -34,6 +34,12 @@ function rar --on-event modules_trigger
             set -l origpath $PWD
             set -l randfname file-(random).rar
 
+            # locale fuckups
+            set -l locale locale | string replace -ar '=.*' ''
+            for loc in $locale
+                set -lx $loc ''
+            end
+
             cd $tmpdir
             aria2c $file_path -o $randfname
 
