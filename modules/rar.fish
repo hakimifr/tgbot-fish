@@ -34,11 +34,11 @@ function rar --on-event modules_trigger
             set -l origpath $PWD
             set -l randfname file-(random).rar
 
-            aria2c $file_path -o $tmpdir/$randfname
+            cd $tmpdir
+            aria2c $file_path -o $randfname
 
             pr_debug rar "Extracting file"
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
-            cd $tmpdir
             pr_debug rar "--- rar ---
 file: $(basename $randfname)
 directory contents:
