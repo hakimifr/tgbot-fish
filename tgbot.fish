@@ -8,6 +8,9 @@ if test "$fish_version" -lt 340
 end
 set -e fish_version
 
+# Set locale
+locale | string replace -ar '^' 'set -gx ' | string replace -a '=' ' ' | source
+
 set width $COLUMNS
 set text "Sourcing core scripts"
 set_color -b brmagenta
