@@ -63,6 +63,7 @@ $(ls)"
 end
 
 function __rar_err_handler -S
+    pr_debug rar "unrar exited with error code: $status"
     tg --editmsg $ret_chat_id $sent_msg_id "Failed to extract archive"
     __rar_cleanup
     cd $origpath
