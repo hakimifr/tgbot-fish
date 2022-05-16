@@ -9,7 +9,7 @@ set -g cmds "$argv"
 # Source util so we can reply
 source util.fish
 
-set -g command_output "$(bash -c "$cmds")"
+set -g command_output "$(bash -c "$cmds" 2>&1)"
 if test $status -ne 0
     set -g command_failed true
 else
