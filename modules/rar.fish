@@ -34,19 +34,13 @@ function rar --on-event modules_trigger
             set -l origpath $PWD
             set -l randfname file-(random).rar
 
-            # locale fuckups
-            locale | string replace -ar '^' 'set -gx ' | string replace -a '=' ' ' | string replace -a 'C.UTF-8' 'en_US.UTF-8' | source
-
             cd $tmpdir
             aria2c $file_path -o $randfname
 
             pr_debug rar "Extracting file"
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
-            pr_debug rar "--- rar ---
-file: $(basename $randfname)
-directory contents:
-$(ls)"
-            unrar e (basename $randfname) &>>$BOT_HOME/logs/debug.log
+            pr_debug rar "file: $(basename $randfname)"
+            7z e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler
 
             rm -f $randfname
@@ -55,7 +49,6 @@ $(ls)"
 $(ls)"
             tg --editmsg $ret_chat_id $sent_msg_id "Uploading"
             __rar_upload (find -type f)
-            wait
             __rar_cleanup
 
             tg --editmsg $ret_chat_id $sent_msg_id "Complete."
@@ -66,7 +59,7 @@ end
 
 function __rar_err_handler -S
     pr_debug rar "unrar exited with error code: $status"
-    tg --editmsg $ret_chat_id $sent_msg_id "Warning: rar exited with error"
+    tg --editmsg $ret_chat_id $sent_msg_id "Warning: 7z exited with error"
 end
 
 function __rar_cleanup -S
@@ -81,4 +74,5 @@ function __rar_upload
             :
         end
     end
+    wait
 end
