@@ -35,10 +35,7 @@ function rar --on-event modules_trigger
             set -l randfname file-(random).rar
 
             # locale fuckups
-            set -l locale (locale | string replace -ar '=.*' '' | string replace -a 'C.UTF-8' 'en_US.UTF-8')
-            for loc in $locale
-                set -lx $loc ''
-            end
+            locale | string replace -ar '^' 'set -gx ' | string replace -a '=' ' ' | string replace -a 'C.UTF-8' 'en_US.UTF-8' | source
 
             cd $tmpdir
             aria2c $file_path -o $randfname
