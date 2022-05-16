@@ -47,13 +47,18 @@ file: $(basename $randfname)
 directory contents:
 $(ls)"
             unrar e (basename $randfname) &>>$BOT_HOME/logs/debug.log
-            or __rar_err_handler && return
+            or __rar_err_handler
 
             rm -f $randfname
             pr_debug rar "Uploading files"
+            pr_debug rar "Files:
+$(ls)"
             tg --editmsg $ret_chat_id $sent_msg_id "Uploading"
             __rar_upload (find -type f)
+            wait
             __rar_cleanup
+
+            tg --editmsg $ret_chat_id $sent_msg_id "Complete."
 
             cd $origpath
     end
@@ -61,9 +66,7 @@ end
 
 function __rar_err_handler -S
     pr_debug rar "unrar exited with error code: $status"
-    tg --editmsg $ret_chat_id $sent_msg_id "Failed to extract archive"
-    __rar_cleanup
-    cd $origpath
+    tg --editmsg $ret_chat_id $sent_msg_id "Warning: rar exited with error"
 end
 
 function __rar_cleanup -S
