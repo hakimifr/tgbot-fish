@@ -40,7 +40,7 @@ function rar --on-event modules_trigger
             pr_debug rar "Extracting file"
             tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
             pr_debug rar "file: $(basename $randfname)"
-            7z e (basename $randfname) &>>$BOT_HOME/logs/debug.log
+            7za e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler
 
             rm -f $randfname
