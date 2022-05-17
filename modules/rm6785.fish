@@ -20,44 +20,37 @@ set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
 function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
         case '.sticker' '.postupdatesticker'
-            for user in $bot_owner_id $fwd_auth_user
-                if test "$msgger" = "$user"
-                    if string match -qe -- $ret_chat_id $fwd_approved_chat_id
-                        tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
-                        tg --sendsticker $fwd_to $rm6785_update_sticker
-                        tg --editmsg $ret_chat_id $sent_msg_id "Sticker sent"
-                    else
-                        tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
-                    end
-                    return
+            if contains -- $msgger $bot_owner_id $fwd_auth_user
+                if contains -- $ret_chat_id $fwd_approved_chat_id
+                    tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+                    tg --sendsticker $fwd_to $rm6785_update_sticker
+                    tg --editmsg $ret_chat_id $sent_msg_id "Sticker sent"
+                else
+                    tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
                 end
+                return
             end
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to use this command"
         case '.post' '.fwdpost'
-            for user in $bot_owner_id $fwd_auth_user
-                if test "$msgger" = "$user"
-                    if string match -qe -- $ret_chat_id $fwd_approved_chat_id
-                        if test "$ret_replied_msg_id" = null
-                            tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
-                        else
-                            tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
-                            tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
-                            tg --editmsg $ret_chat_id $sent_msg_id Posted
-                        end
+            if contains -- $msgger $bot_owner_id $fwd_auth_user
+                if contains -- $ret_chat_id $fwd_approved_chat_id
+                    if test "$ret_replied_msg_id" = null
+                        tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                     else
-                        tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
+                        tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+                        tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                        tg --editmsg $ret_chat_id $sent_msg_id Posted
                     end
-                    return
+                else
+                    tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
                 end
+                return
             end
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.auth'
             set -l authorized false
-            for user in $bot_owner_id $fwd_auth_user
-                if test "$msgger" = "$user"
-                    set authorized true
-                    break
-                end
+            if contains -- $msgger $bot_owner_id $fwd_auth_user
+                set authorized true
             end
             if test "$authorized" = true
                 tg --replymsg $ret_chat_id $ret_msg_id "Authorizing that user"

@@ -58,7 +58,7 @@ $(ls)"
 end
 
 function __rar_err_handler -S
-    pr_debug rar "unrar exited with error code: $status"
+    pr_debug rar "7z exited with error code: $status"
     tg --editmsg $ret_chat_id $sent_msg_id "Warning: 7z exited with error"
 end
 
