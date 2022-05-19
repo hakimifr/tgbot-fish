@@ -16,6 +16,7 @@ Deprecated commands:
 `.fwdpost` \-\> Does the same as `.post`\."
 
 set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
+set -g approval_count 0
 
 function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
@@ -37,9 +38,14 @@ function realme_rm --on-event modules_trigger
                     if test "$ret_replied_msg_id" = null
                         tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                     else
-                        tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
-                        tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
-                        tg --editmsg $ret_chat_id $sent_msg_id Posted
+                        if test "$approval_count" -ge 2
+                            tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+                            tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                            tg --editmsg $ret_chat_id $sent_msg_id Posted
+                            set -g approval_count 0
+                        else
+                            tg --replymsg $ret_chat_id $ret_msg_id "Not enough approval ($approval_count/2)"
+                        end
                     end
                 else
                     tg --replymsg $ret_chat_id $ret_msg_id "You are not allowed to use this command outside testing group"
@@ -47,6 +53,19 @@ function realme_rm --on-event modules_trigger
                 return
             end
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
+        case '.approve' '.+1*'
+            # Don't really need users to reply to a message but anyway
+            if test "$ret_replied_msg_id" = null
+                tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
+                return
+            end
+
+            if test "$approval_count" -lt 2
+                set -g approval_count (math $approval_count + 1)
+                tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $ap"
+            else
+                tg --replymsg $ret_chat_id $ret_msg_id "Message already have enough approval"
+            end
         case '.auth'
             set -l authorized false
             if contains -- $msgger $bot_owner_id $fwd_auth_user
