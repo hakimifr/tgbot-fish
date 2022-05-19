@@ -43,6 +43,7 @@ function realme_rm --on-event modules_trigger
                             tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
                             tg --editmsg $ret_chat_id $sent_msg_id Posted
                             set -g approval_count 0
+                            set -g approved_users
                         else
                             tg --replymsg $ret_chat_id $ret_msg_id "Not enough approval ($approval_count/2)"
                         end
@@ -60,11 +61,16 @@ function realme_rm --on-event modules_trigger
                 return
             end
 
-            if test "$approval_count" -lt 2
-                set -g approval_count (math $approval_count + 1)
-                tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $ap"
+            if not contains -- $msgger $approved_users
+                if test "$approval_count" -lt 2
+                    set -g approval_count (math $approval_count + 1)
+                    tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $ap"
+                    set -a approved_users $msgger
+                else
+                    tg --replymsg $ret_chat_id $ret_msg_id "Message already have enough approval"
+                end
             else
-                tg --replymsg $ret_chat_id $ret_msg_id "Message already have enough approval"
+                tg --replymsg $ret_chat_id $ret_msg_id "You can only do this once"
             end
         case '.auth'
             set -l authorized false
