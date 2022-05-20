@@ -64,7 +64,7 @@ function realme_rm --on-event modules_trigger
             if not contains -- $msgger $approved_users
                 if test "$approval_count" -lt 2
                     set -g approval_count (math $approval_count + 1)
-                    tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $ap"
+                    tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $approval_count/2"
                     set -a approved_users $msgger
                 else
                     tg --replymsg $ret_chat_id $ret_msg_id "Message already have enough approval"
