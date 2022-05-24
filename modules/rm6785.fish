@@ -17,6 +17,7 @@ Deprecated commands:
 
 set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
 set -g approval_count 0
+set -g approved_users
 
 function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
