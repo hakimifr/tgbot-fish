@@ -14,84 +14,84 @@ function tg -d "Send message and more"
     switch $argv[1]
         # Sending messages
         case --sendmsg
-            set -l result (curl -s $API/sendMessage -d chat_id=$argv[2] -d text=$argv[3] -d disable_web_page_preview=true)
+            set -l result (curl -s $API/sendMessage -F chat_id=$argv[2] -F text=$argv[3] -F disable_web_page_preview=true)
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case --sendmarkdownv2msg
-            set -l result (curl -s $API/sendMessage -d chat_id=$argv[2] -d text=$argv[3] -d parse_mode=MarkdownV2 -d disable_web_page_preview=true)
+            set -l result (curl -s $API/sendMessage -F chat_id=$argv[2] -F text=$argv[3] -F parse_mode=MarkdownV2 -F disable_web_page_preview=true)
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
             # Replying
         case --replymsg
-            set -l result (curl -s $API/sendMessage -d chat_id=$argv[2] -d reply_to_message_id=$argv[3] -d text=$argv[4] -d disable_web_page_preview=true)
+            set -l result (curl -s $API/sendMessage -F chat_id=$argv[2] -F reply_to_message_id=$argv[3] -F text=$argv[4] -F disable_web_page_preview=true)
             set -g sent_msg_id (echo $result | jq '.result.message_id')
         case --replymarkdownv2msg
-            set -l result (curl -s $API/sendMessage -d chat_id=$argv[2] -d reply_to_message_id=$argv[3] -d text=$argv[4] -d parse_mode=MarkdownV2 -d disable_web_page_preview=true)
+            set -l result (curl -s $API/sendMessage -F chat_id=$argv[2] -F reply_to_message_id=$argv[3] -F text=$argv[4] -F parse_mode=MarkdownV2 -F disable_web_page_preview=true)
             set -g sent_msg_id (echo $result | jq '.result.message_id')
 
             # Editing & deleting
         case --editmsg
-            curl -s $API/editMessageText -d chat_id=$argv[2] -d message_id=$argv[3] -d text=$argv[4] -d disable_web_page_preview=true | jq -C . >$curl_out
+            curl -s $API/editMessageText -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] -F disable_web_page_preview=true | jq -C . >$curl_out
         case --editmarkdownv2msg
-            curl -s $API/editMessageText -d chat_id=$argv[2] -d message_id=$argv[3] -d text=$argv[4] -d parse_mode=MarkdownV2 -d disable_web_page_preview=true | jq -C . >$curl_out
+            curl -s $API/editMessageText -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] -F parse_mode=MarkdownV2 -F disable_web_page_preview=true | jq -C . >$curl_out
         case --editcaption
-            curl -s $API/editMessageCaption -d chat_id=$argv[2] -d message_id=$argv[3] -d text=$argv[4] | jq -C . >$curl_out
+            curl -s $API/editMessageCaption -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] | jq -C . >$curl_out
         case --editcaptionmarkdownv2
-            curl -s $API/editMessageCaption -d chat_id=$argv[2] -d message_id=$argv[3] -d text=$argv[4] -d parse_mode=MarkdownV2 jq -C . >$curl_out
-        case --delmsg
-            curl -s $API/deleteMessage -d chat_id=$argv[2] -d message_id=$argv[3] | jq -C . >$curl_out
+            curl -s $API/editMessageCaption -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] -F parse_mode=MarkdownV2 jq -C . >$curl_out
+        case --Felmsg
+            curl -s $API/deleteMessage -F chat_id=$argv[2] -F message_id=$argv[3] | jq -C . >$curl_out
 
             # Stickers
         case --sendsticker
-            curl -s $API/sendSticker -d chat_id=$argv[2] -d sticker=$argv[3] | jq -C . >$curl_out
+            curl -s $API/sendSticker -F chat_id=$argv[2] -F sticker=$argv[3] | jq -C . >$curl_out
         case --replysticker
-            curl -s $API/sendSticker -d chat_id=$argv[2] -d reply_to_message_id=$argv[3] -d sticker=$argv[4] | jq -C . >$curl_out
+            curl -s $API/sendSticker -F chat_id=$argv[2] -F reply_to_message_id=$argv[3] -F sticker=$argv[4] | jq -C . >$curl_out
 
             # Forwarding
         case --forwardmsg
-            curl -s $API/forwardMessage -d from_chat_id=$argv[2] -d chat_id=$argv[3] -d message_id=$argv[4] | jq -C . >$curl_out
+            curl -s $API/forwardMessage -F from_chat_id=$argv[2] -F chat_id=$argv[3] -F message_id=$argv[4] | jq -C . >$curl_out
         case --cpmsg
-            curl -s $API/copyMessage -d from_chat_id=$argv[2] -d chat_id=$argv[3] -d message_id=$argv[4] | jq -C . >$curl_out
+            curl -s $API/copyMessage -F from_chat_id=$argv[2] -F chat_id=$argv[3] -F message_id=$argv[4] | jq -C . >$curl_out
 
             # Chat management
         case --pinmsg
-            curl -s $API/pinChatMessage -d chat_id=$argv[2] -d message_id=$argv[3] | jq -C . >$curl_out
+            curl -s $API/pinChatMessage -F chat_id=$argv[2] -F message_id=$argv[3] | jq -C . >$curl_out
         case --unpinmsg
-            curl -s $API/unpinChatMessage -d chat_id=$argv[2] -d message_id=$argv[3] | jq -C . >$curl_out
+            curl -s $API/unpinChatMessage -F chat_id=$argv[2] -F message_id=$argv[3] | jq -C . >$curl_out
         case --ban
-            curl -s $API/banChatMember -d chat_id=$argv[2] -d user_id=$argv[3] | jq -C . >$curl_out
+            curl -s $API/banChatMember -F chat_id=$argv[2] -F user_id=$argv[3] | jq -C . >$curl_out
         case --unban
-            curl -s $API/unbanChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d only_if_banned=true | jq -C . >$curl_out
+            curl -s $API/unbanChatMember -F chat_id=$argv[2] -F user_id=$argv[3] -F only_if_banned=true | jq -C . >$curl_out
         case --promote
-            curl -s $API/promoteChatMember -d chat_id=$argv[2] -d user_id=$argv[3] \
-                -d can_manage_chat=true \
-                -d can_post_messages=true \
-                -d can_edit_messages=true \
-                -d can_delete_messages=true \
-                -d can_manage_voice_chats=true \
-                -d can_restrict_members=true \
-                -d can_change_info=true \
-                -d can_invite_users=true \
-                -d can_pin_messages=true \
-                -d is_anonymous=false \
-                -d can_promote_members=false | jq -C . >$curl_out
-        case --demote
-            curl -s $API/promoteChatMember -d chat_id=$argv[2] -d user_id=$argv[3] \
-                -d can_manage_chat=false \
-                -d can_post_messages=false \
-                -d can_edit_messages=false \
-                -d can_delete_messages=false \
-                -d can_manage_voice_chats=false \
-                -d can_restrict_members=false \
-                -d can_change_info=false \
-                -d can_invite_users=false \
-                -d can_pin_messages=false \
-                -d is_anonymous=false \
-                -d can_promote_members=false | jq -C . >$curl_out
+            curl -s $API/promoteChatMember -F chat_id=$argv[2] -F user_id=$argv[3] \
+                -F can_manage_chat=true \
+                -F can_post_messages=true \
+                -F can_edit_messages=true \
+                -F can_delete_messages=true \
+                -F can_manage_voice_chats=true \
+                -F can_restrict_members=true \
+                -F can_change_info=true \
+                -F can_invite_users=true \
+                -F can_pin_messages=true \
+                -F is_anonymous=false \
+                -F can_promote_members=false | jq -C . >$curl_out
+        case --Femote
+            curl -s $API/promoteChatMember -F chat_id=$argv[2] -F user_id=$argv[3] \
+                -F can_manage_chat=false \
+                -F can_post_messages=false \
+                -F can_edit_messages=false \
+                -F can_delete_messages=false \
+                -F can_manage_voice_chats=false \
+                -F can_restrict_members=false \
+                -F can_change_info=false \
+                -F can_invite_users=false \
+                -F can_pin_messages=false \
+                -F is_anonymous=false \
+                -F can_promote_members=false | jq -C . >$curl_out
         case --mute
-            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d \
+            curl -s $API/restrictChatMember -F chat_id=$argv[2] -F user_id=$argv[3] -F \
                 permissions='{"can_send_messages": false}' | jq -C . >$curl_out
         case --unmute
-            curl -s $API/restrictChatMember -d chat_id=$argv[2] -d user_id=$argv[3] -d \
+            curl -s $API/restrictChatMember -F chat_id=$argv[2] -F user_id=$argv[3] -F \
                 permissions'={
                     "can_send_messages": true,
                     "can_send_media_messages": true,
