@@ -172,6 +172,8 @@ function update -d "Get updates"
     end
 end
 
+##### Useful functions ######
+
 function update_init -d "Get initial update ID"
     while test -z "$update_id"
         set -g update_id (curl -s $API/getUpdates -d offset=-1 -d timeout=60 | jq '.result[].update_id')
@@ -217,6 +219,24 @@ function is_admin
         return 1
     end
 end
+
+function ensure_reply
+    set -l custom_text $argv
+    if test "$ret_replied_msg_id" = null
+        if test -z "$custom_text"
+            tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
+        else
+            tg --replymsg $ret_chat_id $ret_msg_id "$custom_text"
+        end
+        return 1
+    else
+        return 0
+    end
+end
+########################
+
+
+###### Logging functions #########
 
 function __pr_gen
     test -d $BOT_HOME/logs
