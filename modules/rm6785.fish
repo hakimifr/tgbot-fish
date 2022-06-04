@@ -10,6 +10,10 @@ set -g __module_help_message "Irrelevant outside testing group\. Available comma
 `.auth` \-\> Authorize someone to use this module\.
 `.unauth` \-\> Remove someone's authorization of using this module\.
 `.reloadauthed` \-\> Reload authorized user, useful when you edit the gist\.
+`.approve`, `.+1` \-\> Approve a message to be posted\.
+`.unapprove`, `.-1` \-\> Unapprove a message to be posted\.
+`.approval` \-\> View approval count\.
+`.resetapproval` \-\> \(bot owner only\) Reset approval counter\.
 
 Deprecated commands:
 `.postupdatesticker` \-\> Does the same as `.sticker`\.
@@ -18,6 +22,7 @@ Deprecated commands:
 set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
 set -g approval_count 0
 set -g approved_users
+set -g unapproved_users
 
 function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
@@ -57,10 +62,8 @@ function realme_rm --on-event modules_trigger
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.approve' '.+1*'
             # Don't really need users to reply to a message but anyway
-            if test "$ret_replied_msg_id" = null
-                tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
-                return
-            end
+            ensure_reply
+            or return
 
             if contains -- $msgger $bot_owner_id $fwd_auth_user
                 if not contains -- $msgger $approved_users
@@ -68,6 +71,12 @@ function realme_rm --on-event modules_trigger
                         set -g approval_count (math $approval_count + 1)
                         tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $approval_count/2"
                         set -a approved_users $msgger
+
+                        # Remove the user from $unapproved_users if they're there
+                        if contains -- $msgger $unapproved_users
+                            set -l index (contains -i -- $msgger $unapproved_users)
+                            set -e unapproved_users[$index]
+                        end
                     else
                         tg --replymsg $ret_chat_id $ret_msg_id "Message already have enough approval"
                     end
@@ -77,6 +86,40 @@ function realme_rm --on-event modules_trigger
             else
                 tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
             end
+        case '.unapprove' '.-1'
+            ensure_reply
+            or return
+
+            if contains -- $msgger $bot_owner_id $fwd_auth_user
+                if not contains -- $msgger $unapproved_users
+                    set -g approval_count (math $approval_count - 1)
+                    tg --replymsg $ret_chat_id $ret_msg_id "approval count: $approval_count/2"
+                    set -a $msgger $unapproved_users
+
+                    # Remove the user from $approved_users if they're there
+                    if contains -- $msgger $approved_users
+                        set -l index (contains -i -- $msgger $approved_users)
+                        set -e approved_users[$index]
+                    end
+                else
+                    tg --replymsg $ret_chat_id $ret_msg_id "You can only do this once"
+                end
+            else
+                tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
+            end
+        case '.approval'
+            tg --replymsg $ret_chat_id $ret_msg_id "Approval count: $approval_count/2"
+        case '.resetapproval'
+            if not is_botowner
+                err_not_botowner
+                return
+            end
+
+            set -g approval_count 0
+            set -g approved_users
+            set -g unapproved_users
+
+            tg --replymsg $ret_chat_id $ret_msg_id "Counter resetted. Approval  count: $approval_count/2"
         case '.auth'
             set -l authorized false
             if contains -- $msgger $bot_owner_id $fwd_auth_user
