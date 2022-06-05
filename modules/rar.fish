@@ -38,7 +38,7 @@ function rar --on-event modules_trigger
             aria2c $file_path -o $randfname
 
             pr_debug rar "Extracting file"
-            tg --editmsg $ret_chat_id $sent_msg_id "Extracting"
+            tg --editmsg $ret_chat_id $sent_msg_id Extracting
             pr_debug rar "file: $(basename $randfname)"
             7za e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler
@@ -47,7 +47,7 @@ function rar --on-event modules_trigger
             pr_debug rar "Uploading files"
             pr_debug rar "Files:
 $(ls)"
-            tg --editmsg $ret_chat_id $sent_msg_id "Uploading"
+            tg --editmsg $ret_chat_id $sent_msg_id Uploading
             __rar_upload (find -type f)
             __rar_cleanup
 

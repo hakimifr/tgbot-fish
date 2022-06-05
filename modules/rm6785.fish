@@ -94,7 +94,7 @@ function realme_rm --on-event modules_trigger
                 if not contains -- $msgger $unapproved_users
                     set -g approval_count (math $approval_count - 1)
                     tg --replymsg $ret_chat_id $ret_msg_id "approval count: $approval_count/2"
-                    set -a $msgger $unapproved_users
+                    set -a unapproved_users $msgger
 
                     # Remove the user from $approved_users if they're there
                     if contains -- $msgger $approved_users
