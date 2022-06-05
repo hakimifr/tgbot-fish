@@ -49,7 +49,7 @@ $(for mod in $loaded_mod; basename $mod; end)
                 set -l module_name (string replace -a '-' '\\-' $module_name)
                 set -l module_name (string replace -a '_' '\\_' $module_name)
                 set -l module_name (string replace -a '.' '\\.' $module_name)
-                set -l error_code (curl -s $API/sendMessage -d chat_id=$ret_chat_id -d reply_to_message_id=$ret_msg_id -d parse_mode=MarkdownV2 -d "text=Help for module $module_name:
+                set -l error_code (curl -s $API/sendMessage -F chat_id=$ret_chat_id -F reply_to_message_id=$ret_msg_id -F parse_mode=MarkdownV2 -F "text=Help for module $module_name:
 $__module_help_message" | jq '.error_code')
                 pr_debug modules_info "error_code: $error_code"
                 pr_debug modules_info "module_name: $module_name"
