@@ -9,6 +9,7 @@ set -g __module_help_message "Irrelevant outside testing group\. Available comma
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
 `.auth` \-\> Authorize someone to use this module\.
 `.unauth` \-\> Remove someone's authorization of using this module\.
+`.lsauthed` \-\> List authorized users\.
 `.reloadauthed` \-\> Reload authorized user, useful when you edit the gist\.
 `.approve`, `.+1` \-\> Approve a message to be posted\.
 `.unapprove`, `.-1` \-\> Unapprove a message to be posted\.
