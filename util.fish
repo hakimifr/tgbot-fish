@@ -37,7 +37,7 @@ function tg -d "Send message and more"
             curl -s $API/editMessageCaption -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] | jq -C . >$curl_out
         case --editcaptionmarkdownv2
             curl -s $API/editMessageCaption -F chat_id=$argv[2] -F message_id=$argv[3] -F text=$argv[4] -F parse_mode=MarkdownV2 jq -C . >$curl_out
-        case --Felmsg
+        case --delmsg
             curl -s $API/deleteMessage -F chat_id=$argv[2] -F message_id=$argv[3] | jq -C . >$curl_out
 
             # Stickers
@@ -74,7 +74,7 @@ function tg -d "Send message and more"
                 -F can_pin_messages=true \
                 -F is_anonymous=false \
                 -F can_promote_members=false | jq -C . >$curl_out
-        case --Femote
+        case --demote
             curl -s $API/promoteChatMember -F chat_id=$argv[2] -F user_id=$argv[3] \
                 -F can_manage_chat=false \
                 -F can_post_messages=false \
