@@ -64,7 +64,7 @@ function realme_rm --on-event modules_trigger
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.fpost'
             if test "$msgger" = "$bot_owner_id"
-                if test ret_replied_msg_id = null
+                if test "$ret_replied_msg_id" = null
                     tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                 else
                     tg --replymsg $ret_chat_id $ret_msg_id "Hold on... Force posting with $approval_count/2 approval"
