@@ -7,6 +7,7 @@ set -g __module_functions realme_rm
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
+`.fpost` \-\> \(bot owner only\) Force post without enough approval\.
 `.auth` \-\> Authorize someone to use this module\.
 `.unauth` \-\> Remove someone's authorization of using this module\.
 `.lsauthed` \-\> List authorized users\.
@@ -61,6 +62,18 @@ function realme_rm --on-event modules_trigger
                 return
             end
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
+        case '.fpost'
+            if test "$msgger" = "$bot_owner_id"
+                if test ret_replied_msg_id = null
+                    tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
+                else
+                    tg --replymsg $ret_chat_id $ret_msg_id "Hold on... Force posting with $approval_count/2 approval"
+                    tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                    tg --editmsg $ret_chat_id $sent_msg_id Posted
+                end
+            else
+                tg --replymsg $ret_chat_id $ret_msg_id "Only usable by bot owner"
+            end
         case '.approve' '.+1*'
             # Don't really need users to reply to a message but anyway
             ensure_reply
