@@ -73,7 +73,8 @@ function __rar_upload
 
         set files_count (math $files_count + 1)
         if test "$files_count" -gt 10
-            sleep 25
+            tg --sendmsg $ret_chat_id "15 sec cooldown, please wait"
+            sleep 15
             set files_count 0
         end
 
