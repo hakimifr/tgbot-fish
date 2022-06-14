@@ -67,8 +67,15 @@ function __rar_cleanup -S
 end
 
 function __rar_upload
+    set -l files_count 0
     for file in $argv
         curl -s $API/sendDocument -F chat_id=$ret_chat_id -F document=@$file &
+
+        set files_count (math $files_count + 1)
+        if test "$files_count" -gt 6
+            sleep 30
+            set files_count 0
+        end
 
         while test (jobs | count) -gt 2
             :
