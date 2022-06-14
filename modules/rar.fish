@@ -70,7 +70,7 @@ function __rar_upload
     for file in $argv
         curl -s $API/sendDocument -F chat_id=$ret_chat_id -F document=@$file &
 
-        while test (jobs | count) -gt 5
+        while test (jobs | count) -gt 2
             :
         end
     end
