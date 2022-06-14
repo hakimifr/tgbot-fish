@@ -51,7 +51,7 @@ $(ls)"
             __rar_upload (find -type f)
             __rar_cleanup
 
-            tg --editmsg $ret_chat_id $sent_msg_id "Complete."
+            tg --replymsg $ret_chat_id $ret_msg_id "Extraction complete."
 
             cd $origpath
     end
