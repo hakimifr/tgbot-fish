@@ -3,7 +3,7 @@ FROM fedora:latest
 # Install packages
 RUN echo "max_parallel_downloads=20" >> /etc/dnf/dnf.conf
 RUN dnf install -y python3-devel jq aria2 pv openssl neofetch curl-devel glib-devel openssl-devel python3 curl bash which zip git nano file glib2 \
-	make g++ wget asciidoc coreutils dnf-plugins-core gh netcat zip unzip unrar p7zip
+	make g++ wget asciidoc coreutils dnf-plugins-core gh netcat zip unzip p7zip
 RUN dnf -y copr enable ignatenkobrain/fish
 RUN dnf install -y fish
 RUN dnf upgrade -y
@@ -13,7 +13,7 @@ RUN dnf install -y \
     https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 RUN dnf install -y \
     https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-RUN dnf install -y ffmpeg
+RUN dnf install -y ffmpeg unrar
 RUN dnf clean all
 
 # Python
