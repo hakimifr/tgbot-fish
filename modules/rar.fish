@@ -40,7 +40,7 @@ function rar --on-event modules_trigger
             pr_debug rar "Extracting file"
             tg --editmsg $ret_chat_id $sent_msg_id Extracting
             pr_debug rar "file: $(basename $randfname)"
-            7za e (basename $randfname) &>>$BOT_HOME/logs/debug.log
+            unrar e (basename $randfname) &>>$BOT_HOME/logs/debug.log
             or __rar_err_handler
 
             rm -f $randfname
@@ -58,8 +58,8 @@ $(ls)"
 end
 
 function __rar_err_handler -S
-    pr_debug rar "7z exited with error code: $status"
-    tg --editmsg $ret_chat_id $sent_msg_id "Warning: 7z exited with error"
+    pr_debug rar "unrar exited with error code: $status"
+    tg --editmsg $ret_chat_id $sent_msg_id "Warning: unrar exited with error"
 end
 
 function __rar_cleanup -S
