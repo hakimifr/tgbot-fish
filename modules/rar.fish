@@ -72,8 +72,8 @@ function __rar_upload
         curl -s $API/sendDocument -F chat_id=$ret_chat_id -F document=@$file &
 
         set files_count (math $files_count + 1)
-        if test "$files_count" -gt 6
-            sleep 30
+        if test "$files_count" -gt 10
+            sleep 25
             set files_count 0
         end
 
