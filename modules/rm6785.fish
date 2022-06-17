@@ -8,6 +8,7 @@ set -g __module_help_message "Irrelevant outside testing group\. Available comma
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
 `.fpost` \-\> \(bot owner only\) Force post without enough approval\.
+`.lint` \-\> Lint a post
 `.auth` \-\> Authorize someone to use this module\.
 `.unauth` \-\> Remove someone's authorization of using this module\.
 `.lsauthed` \-\> List authorized users\.
@@ -195,6 +196,73 @@ end
             tg --replymsg $ret_chat_id $ret_msg_id "Reading gist..."
             read_authed_user
             tg --editmsg $ret_chat_id $sent_msg_id "Authorized user reloaded"
+
+        case '.lint'
+            if test "$ret_replied_msg_id" = null
+                tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message"
+                return
+            end
+
+            tg --replymsg $ret_chat_id $ret_msg_id "Linting"
+
+            ### LINT ###
+            set -l problems
+            # 1. Author, Android version, Build date
+            string match -q -- "• Author:" $ret_replied_msg_text
+            or set -a problems "Missing author" $ret_replied_msg_text
+            string match -q -- "• Android version:" $ret_replied_msg_text
+            or set -a problems "Missing Android version" $ret_replied_msg_text
+            string match -q -- "• Build date:" $ret_replied_msg_text
+            or set -a problems "Missing build date" $ret_replied_msg_text
+
+            # Wrong build date format
+            if string match -q -- "• Build date:" $ret_replied_msg_text
+            and not string match -qr -- "• Build date: ..-..-...."
+                set -a problems "Wrong build date format"
+            end
+
+            # Changelog, Bugs, Notes, Downloads
+            string match -q -- "Changelog" $ret_replied_msg_text
+            or set -a problems "Missing Changelog"
+            string match -q -- "Bugs" $ret_replied_msg_text
+            or set -a problems "Missing bugs"
+            string match -q -- "Notes" $ret_replied_msg_text
+            or set -a problems "Missing Notes"
+            string match -q -- "Downloads"
+            or set -a problems "Missing Downloads"
+
+            # Bold check
+            if string match -q -- "Changelog" $ret_replied_msg_text
+            and not string match -q -- "*Changelog*"
+                set -a problems "Changelog is not bold"
+            end
+            if string match -q -- "Bugs" $ret_replied_msg_text
+            and not string match -q -- "*Bugs*"
+                set -a problems "Bugs is not bold"
+            end
+            if string match -q -- "Notes" $ret_replied_msg_text
+            and not string match -q --  "*Notes*" $ret_replied_msg_text
+                set -a problems "Notes is not bold"
+            end
+            if string match -q -- "Downloads" $ret_replied_msg_text
+            and not string match -q -- "*Downloads*" $ret_replied_msg_text
+                set -a problems "Downloads is not bold"
+            end
+
+            # Miscs
+            string match -q -- "Screenshots" $ret_replied_msg_text
+            or set -a problems "Missing Screenshots"
+            string match -q -- "Sources" $ret_replied_msg_text
+            or set -a problems "Missing Sources"
+            string match -q -- "Support group" $ret_replied_msg_text
+            or set -a problems "Missing Support group"
+
+            if test (count $problems) -eq 0
+                tg --editmsg $ret_chat_id $sent_msg_id "No issues found"
+            else
+                tg --editmsg $ret_chat_id $sent_msg_id "Issues found:
+$(printf -- '- %s\n' $problems)"  # Fish's builtin printf doesn't like - without -- so yeah
+            end
     end
 end
 
