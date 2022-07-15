@@ -26,6 +26,16 @@ set -g auth_gist_link "https://gist.github.com/3d681dec0fa904066e0030d5a528adcb"
 set -g approval_count 0
 set -g approved_users
 set -g unapproved_users
+set -g rm6785_id -1001754321934
+
+# tg --cpmsg doesn't set $sent_msg_id, im pretty sure i've
+# a module which relies on it not doing that, so unfortunately
+# i'll have to define a function that does the same but instead
+# storing the $sent_msg_id
+function copyMessage
+    set -l result (curl -s $API/copyMessage -F from_chat_id=$argv[1] -F chat_id=$argv[2] -F message_id=$argv[3])
+    set -g __rm6785_sent_msg_id (echo $result | jq '.result.message_id')
+end
 
 function realme_rm --on-event modules_trigger
     switch $ret_lowered_msg_text
@@ -50,6 +60,8 @@ function realme_rm --on-event modules_trigger
                         if test "$approval_count" -ge 2
                             tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
                             tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                            copyMessage $ret_chat_id $rm6785_id $ret_replied_msg_id
+                            tg --pinmsg $rm6785_id $__rm6785_sent_msg_id
                             tg --editmsg $ret_chat_id $sent_msg_id Posted
                             set -g approval_count 0
                             set -g approved_users
@@ -70,6 +82,8 @@ function realme_rm --on-event modules_trigger
                 else
                     tg --replymsg $ret_chat_id $ret_msg_id "Hold on... Force posting with $approval_count/2 approval"
                     tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
+                    copyMessage $ret_chat_id $rm6785_id $ret_replied_msg_id
+                    tg --pinmsg $rm6785_id $__rm6785_sent_msg_id
                     tg --editmsg $ret_chat_id $sent_msg_id Posted
                 end
             else
