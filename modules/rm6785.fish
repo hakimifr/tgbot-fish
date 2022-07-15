@@ -27,6 +27,7 @@ set -g approval_count 0
 set -g approved_users
 set -g unapproved_users
 set -g rm6785_id -1001754321934
+set -g samar_id 1138003186
 
 # tg --cpmsg doesn't set $sent_msg_id, im pretty sure i've
 # a module which relies on it not doing that, so unfortunately
@@ -77,6 +78,7 @@ function realme_rm --on-event modules_trigger
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.fpost'
             if test "$msgger" = "$bot_owner_id"
+            or test "$msgger" = "$samar_id"
                 if test "$ret_replied_msg_id" = null
                     tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                 else
