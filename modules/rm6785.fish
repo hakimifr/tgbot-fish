@@ -7,6 +7,7 @@ set -g __module_functions realme_rm
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
+`.spost` <reply_to_a_message\> \-\> Same as post, but send a sticker before forwarding post\.
 `.fpost` \-\> \(bot owner only\) Force post without enough approval\.
 `.lint` \-\> Lint a post
 `.auth` \-\> Authorize someone to use this module\.
@@ -52,7 +53,7 @@ function realme_rm --on-event modules_trigger
                 return
             end
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to use this command"
-        case '.post' '.fwdpost'
+        case '.post' '.spost' '.fwdpost'
             if contains -- $msgger $bot_owner_id $fwd_auth_user
                 if contains -- $ret_chat_id $fwd_approved_chat_id
                     if test "$ret_replied_msg_id" = null
@@ -60,6 +61,11 @@ function realme_rm --on-event modules_trigger
                     else
                         if test "$approval_count" -ge 2
                             tg --replymsg $ret_chat_id $ret_msg_id "Hold on..."
+
+                            if test "$ret_lowered_msg_text" = ".spost"
+                                tg --sendsticker $fwd_to $rm6785_update_sticker
+                            end
+
                             tg --cpmsg $ret_chat_id $fwd_to $ret_replied_msg_id
                             copyMessage $ret_chat_id $rm6785_id $ret_replied_msg_id
                             tg --pinmsg $rm6785_id $__rm6785_sent_msg_id
