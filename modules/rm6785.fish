@@ -230,53 +230,35 @@ end
             ### LINT ###
             set -l problems
             # 1. Author, Android version, Build date
-            string match -q -- "• Author:" $ret_replied_msg_text
+            string match -qr -- "• Author:" $ret_replied_msg_text
             or set -a problems "Missing author" $ret_replied_msg_text
-            string match -q -- "• Android version:" $ret_replied_msg_text
+            string match -qr -- "• Android version:" $ret_replied_msg_text
             or set -a problems "Missing Android version" $ret_replied_msg_text
-            string match -q -- "• Build date:" $ret_replied_msg_text
+            string match -qr -- "• Build date:" $ret_replied_msg_text
             or set -a problems "Missing build date" $ret_replied_msg_text
 
             # Wrong build date format
-            if string match -q -- "• Build date:" $ret_replied_msg_text
-            and not string match -qr -- "• Build date: ..-..-...."
+            if string match -qr -- "• Build date:" $ret_replied_msg_text
+            and not string match -qrr -- "• Build date: ..-..-...."
                 set -a problems "Wrong build date format"
             end
 
             # Changelog, Bugs, Notes, Downloads
-            string match -q -- "Changelog" $ret_replied_msg_text
+            string match -qr -- "Changelog" $ret_replied_msg_text
             or set -a problems "Missing Changelog"
-            string match -q -- "Bugs" $ret_replied_msg_text
+            string match -qr -- "Bugs" $ret_replied_msg_text
             or set -a problems "Missing bugs"
-            string match -q -- "Notes" $ret_replied_msg_text
+            string match -qr -- "Notes" $ret_replied_msg_text
             or set -a problems "Missing Notes"
-            string match -q -- "Downloads"
+            string match -qr -- "Downloads"
             or set -a problems "Missing Downloads"
 
-            # Bold check
-            if string match -q -- "Changelog" $ret_replied_msg_text
-            and not string match -q -- "*Changelog*"
-                set -a problems "Changelog is not bold"
-            end
-            if string match -q -- "Bugs" $ret_replied_msg_text
-            and not string match -q -- "*Bugs*"
-                set -a problems "Bugs is not bold"
-            end
-            if string match -q -- "Notes" $ret_replied_msg_text
-            and not string match -q --  "*Notes*" $ret_replied_msg_text
-                set -a problems "Notes is not bold"
-            end
-            if string match -q -- "Downloads" $ret_replied_msg_text
-            and not string match -q -- "*Downloads*" $ret_replied_msg_text
-                set -a problems "Downloads is not bold"
-            end
-
             # Miscs
-            string match -q -- "Screenshots" $ret_replied_msg_text
+            string match -qr -- "Screenshots" $ret_replied_msg_text
             or set -a problems "Missing Screenshots"
-            string match -q -- "Sources" $ret_replied_msg_text
+            string match -qr -- "Sources" $ret_replied_msg_text
             or set -a problems "Missing Sources"
-            string match -q -- "Support group" $ret_replied_msg_text
+            string match -qr -- "Support group" $ret_replied_msg_text
             or set -a problems "Missing Support group"
 
             if test (count $problems) -eq 0
