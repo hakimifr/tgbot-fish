@@ -11,7 +11,10 @@ None\.
 set -g rm6785_photography_id -1001267207006
 set -g sus_match usdt \
     300 \
-    "private message"
+    "private message" \
+    crypto \
+    bitcoin \
+    forex
 
 function usdt --on-event modules_trigger
     if test "$ret_chat_id" != "$rm6785_photography_id"
