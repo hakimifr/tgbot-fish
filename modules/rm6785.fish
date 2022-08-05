@@ -196,7 +196,7 @@ function realme_rm --on-event modules_trigger
             set -l index 1
             for user in $fwd_auth_user
                 if string match -qr -- '^@' $fwd_user_name[$index]
-                    set -a auth_message "User [$user](t.me/$(string replace -r '^@' '' $fwd_user_name[$index] | string replace -a '_' '\\_'))"
+                    set -a auth_message "User [$(echo $fwd_user_name[$index] | string replace -r '^@' '' | string replace -a '_' '\\_')](t.me/$(string replace -r '^@' '' $fwd_user_name[$index] | string replace -a '_' '\\_'))"
                 else
                     set -a auth_message "User $user \\- $(echo -n $fwd_user_name | sed 's/[][`~!@#\$%^&*()-_=+{}\|;:",<.>/?'"'"']/\\&/g')"
                 end
