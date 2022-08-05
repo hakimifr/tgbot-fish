@@ -6,8 +6,8 @@ set -g __module_version 69
 set -g __module_functions realme_rm
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
-`.post <reply_to_a_message\>` \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
-`.spost` <reply_to_a_message\> \-\> Same as post, but send a sticker before forwarding post\.
+`.post` <reply\_to\_a\_message\> \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
+`.spost` <reply\_to\_a\_message\> \-\> Same as post, but send a sticker before forwarding post\.
 `.fpost` \-\> \(bot owner only\) Force post without enough approval\.
 `.lint` \-\> Lint a post
 `.auth` \-\> Authorize someone to use this module\.
