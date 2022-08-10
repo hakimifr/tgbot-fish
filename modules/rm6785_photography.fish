@@ -14,7 +14,9 @@ set -g sus_match usdt \
     "private message" \
     crypto \
     bitcoin \
-    forex
+    forex \
+    "join me" \
+    "to chat"
 
 function usdt --on-event modules_trigger
     if test "$ret_chat_id" != "$rm6785_photography_id"
