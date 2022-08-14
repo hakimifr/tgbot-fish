@@ -17,6 +17,7 @@ set -g fwd_approved_chat_id \
 set -g fwd_to -1001384382397
 set -g saving_group_id -1001607510711
 set -g tagger_group_id -1001530403261
+set -g bot_id 5079112650
 set -g bot_owner_id 1024853832
 set -g rm6785_update_sticker CAACAgUAAxkBAAED_CFiFIVi0Z1YX3MOK9xnaylscRhWbQACNwIAAt6sOFUrmjW-3D3-2yME
 set -g module_noautoload "modules/log.fish" "modules/afk.fish"
