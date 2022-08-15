@@ -30,8 +30,8 @@ set -g msg_blocklist \
     "new comer" \
     invest \
     "t.me/\+" \
-    "ᴛʀᴀᴅɪɴɢ" \
-    "ɪɴᴠᴇsᴛ" \
+    ᴛʀᴀᴅɪɴɢ \
+    ɪɴᴠᴇsᴛ \
     trading \
     trade \
     usdt \

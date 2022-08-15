@@ -267,7 +267,7 @@ function pr_debug
 end
 
 
-argparse 'enable-curl-output' 'disable-debug-print' -- $argv
+argparse enable-curl-output disable-debug-print -- $argv
 or pr_error "Argument parsing error, ignoring"
 
 set -g curl_out /dev/null

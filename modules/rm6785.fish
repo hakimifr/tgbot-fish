@@ -84,7 +84,7 @@ function realme_rm --on-event modules_trigger
             tg --replymsg $ret_chat_id $ret_msg_id "You're not allowed to do this bsdk"
         case '.fpost'
             if test "$msgger" = "$bot_owner_id"
-            or test "$msgger" = "$samar_id"
+                or test "$msgger" = "$samar_id"
                 if test "$ret_replied_msg_id" = null
                     tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please"
                 else
@@ -225,7 +225,7 @@ end
                 return
             end
 
-            tg --replymsg $ret_chat_id $ret_msg_id "Linting"
+            tg --replymsg $ret_chat_id $ret_msg_id Linting
 
             ### LINT ###
             set -l problems
@@ -239,42 +239,42 @@ end
 
             # Wrong build date format
             if string match -q -- "• Build date:" $ret_replied_msg_text
-            and not string match -qr -- "• Build date: ..-..-...."
+                and not string match -qr -- "• Build date: ..-..-...."
                 set -a problems "Wrong build date format"
             end
 
             # Changelog, Bugs, Notes, Downloads
-            string match -q -- "Changelog" $ret_replied_msg_text
+            string match -q -- Changelog $ret_replied_msg_text
             or set -a problems "Missing Changelog"
-            string match -q -- "Bugs" $ret_replied_msg_text
+            string match -q -- Bugs $ret_replied_msg_text
             or set -a problems "Missing bugs"
-            string match -q -- "Notes" $ret_replied_msg_text
+            string match -q -- Notes $ret_replied_msg_text
             or set -a problems "Missing Notes"
-            string match -q -- "Downloads"
+            string match -q -- Downloads
             or set -a problems "Missing Downloads"
 
             # Bold check
-            if string match -q -- "Changelog" $ret_replied_msg_text
-            and not string match -q -- "*Changelog*"
+            if string match -q -- Changelog $ret_replied_msg_text
+                and not string match -q -- "*Changelog*"
                 set -a problems "Changelog is not bold"
             end
-            if string match -q -- "Bugs" $ret_replied_msg_text
-            and not string match -q -- "*Bugs*"
+            if string match -q -- Bugs $ret_replied_msg_text
+                and not string match -q -- "*Bugs*"
                 set -a problems "Bugs is not bold"
             end
-            if string match -q -- "Notes" $ret_replied_msg_text
-            and not string match -q --  "*Notes*" $ret_replied_msg_text
+            if string match -q -- Notes $ret_replied_msg_text
+                and not string match -q -- "*Notes*" $ret_replied_msg_text
                 set -a problems "Notes is not bold"
             end
-            if string match -q -- "Downloads" $ret_replied_msg_text
-            and not string match -q -- "*Downloads*" $ret_replied_msg_text
+            if string match -q -- Downloads $ret_replied_msg_text
+                and not string match -q -- "*Downloads*" $ret_replied_msg_text
                 set -a problems "Downloads is not bold"
             end
 
             # Miscs
-            string match -q -- "Screenshots" $ret_replied_msg_text
+            string match -q -- Screenshots $ret_replied_msg_text
             or set -a problems "Missing Screenshots"
-            string match -q -- "Sources" $ret_replied_msg_text
+            string match -q -- Sources $ret_replied_msg_text
             or set -a problems "Missing Sources"
             string match -q -- "Support group" $ret_replied_msg_text
             or set -a problems "Missing Support group"
@@ -283,7 +283,7 @@ end
                 tg --editmsg $ret_chat_id $sent_msg_id "No issues found"
             else
                 tg --editmsg $ret_chat_id $sent_msg_id "Issues found:
-$(printf -- '- %s\n' $problems)"  # Fish's builtin printf doesn't like - without -- so yeah
+$(printf -- '- %s\n' $problems)" # Fish's builtin printf doesn't like - without -- so yeah
             end
     end
 end
