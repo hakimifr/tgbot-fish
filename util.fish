@@ -2,11 +2,6 @@
 
 source .token.fish
 
-if not set -q curl_out # Output of curl for tg() function
-    # Discard
-    set -g curl_out /dev/null
-end
-
 set -g BOT_HOME $PWD
 
 set API https://api.telegram.org/bot$TOKEN
@@ -269,4 +264,20 @@ function pr_debug
     set_color magenta
     __pr_gen DEBUG $argv[1] $argv[2]
     set_color normal
+end
+
+
+argparse 'enable-curl-output' 'disable-debug-print' -- $argv
+or pr_error "Argument parsing error, ignoring"
+
+set -g curl_out /dev/null
+if set -q _flag_enable_curl_output
+    pr_info util "Enabled curl output"
+    set -g curl_out /dev/stdout
+end
+
+if set -q _flag_disable_debug_print
+    pr_info util "Debugging prints are disabled"
+    function pr_debug
+    end
 end

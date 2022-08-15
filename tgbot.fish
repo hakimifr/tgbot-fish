@@ -25,7 +25,7 @@ echo
 set -e width count i text
 
 source extra.fish
-source util.fish
+source util.fish $argv
 source modules_loader.fish
 
 update_init
