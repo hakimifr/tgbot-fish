@@ -13,6 +13,7 @@ set -g sus_match \
     usdt \
     300 \
     "private message" \
+    "private chat" \
     crypto \
     bitcoin \
     forex \
