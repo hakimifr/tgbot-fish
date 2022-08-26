@@ -3,13 +3,13 @@
 set -g __module_name "Spam protection module (spam_protector.fish)"
 set -g __module_description "Mainly protecting RM6785 groups from scam bot"
 set -g __module_version 69
-set -g __module_functions usdt msg_bl
+set -g __module_functions name_check msg_check
 set -g __module_help_message "Protects most RM6785 community groups from usdt bots\. Available commands:
 None\.
 "
 
 set -g rm6785_photography_id -1001267207006
-set -g sus_match \
+set -g name_match \
     usdt \
     300 \
     "private message" \
@@ -38,7 +38,7 @@ set -g msg_blocklist \
     usdt \
     btc
 
-function usdt --on-event modules_trigger
+function name_check --on-event modules_trigger
     if test "$ret_chat_id" != "$rm6785_photography_id"
         pr_debug spam_protector "Not Photography group, returning"
         return
@@ -50,7 +50,7 @@ function usdt --on-event modules_trigger
 
     set -l name "$ret_first_name $ret_last_name"
     pr_debug spam_protector "Combined name: $name"
-    for match in $sus_match
+    for match in $name_match
         if string match -qei $match $name
             pr_info spam_protector "Name matched, banning"
             tg --delmsg $ret_chat_id $ret_msg_id
@@ -63,7 +63,7 @@ function usdt --on-event modules_trigger
 end
 
 set -g not_admin_groups
-function msg_bl --on-event modules_trigger
+function msg_check --on-event modules_trigger
     if contains -- $ret_chat_id $not_admin_groups
         pr_info spam_protector "Found group '$ret_chat_id' in blacklist, skipping"
         pr_warn spam_protector "Reload this module to clear out blacklist"
