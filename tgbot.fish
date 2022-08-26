@@ -95,5 +95,7 @@ while true
     end
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
+    set -ge ret_first_name
+    set -ge ret_last_name
     set -ge global_fetch
 end
