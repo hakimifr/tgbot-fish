@@ -55,7 +55,7 @@ function name_check --on-event modules_trigger
             pr_info spam_protector "Name matched, banning"
             tg --delmsg $ret_chat_id $ret_msg_id
             tg --ban $ret_chat_id $msgger
-            tg --sendmsg $ret_chat_id "Banned $msgger ($ret_first_name), match in name: $match"
+            tg --sendmsg $ret_chat_id "Banned $msgger ($ret_first_name $ret_last_name), match in name: $match"
             pr_info spam_protector "User $msgger banned"
             break
         end
