@@ -29,6 +29,7 @@ RUN python3 -m ensurepip \
 RUN pip3 install speedtest-cli pycryptodome docopt
 RUN pip3 install git+https://github.com/nlscc/samloader.git
 RUN pip3 install --upgrade pycryptodome git+https://github.com/R0rt1z2/realme-ota
+RUN pip3 cache purge
 WORKDIR /app
 RUN chmod 777 /app
 
