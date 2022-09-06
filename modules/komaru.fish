@@ -28,9 +28,13 @@ function komaru_handler --on-event modules_trigger
             or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
 
             tg --replymsg $ret_chat_id $ret_msg_id "One moment, determining duplicate"
-            komaru_handler::deter_dup
-            and komaru_handler::add_gif $ret_replied_file_id
-            or tg --editmsg $ret_chat_id $sent_msg_id "Duplicate check failed, This GIF is a duplicate."
+            if komaru_handler::deter_dup
+                komaru_handler::add_gif
+                tg --cpmsg $ret_chat_id -1001750281318 $ret_replied_msg_id
+                tg --editmsg $ret_chat_id $sent_msg_id "Duplicate check succeeded, GIF forwarded to channel and added to database."
+            else
+                tg --editmsg $ret_chat_id $sent_msg_id "Duplicate check failed, This GIF is a duplicate."
+            end
         case '.kdeterdup'
             test $ret_replied_msg_id != null
             or tg --replymsg $ret_chat_id $ret_msg_id "Reply to a message please" && return
