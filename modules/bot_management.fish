@@ -11,7 +11,6 @@ set -g __module_help_message "Irrelevant to other than bot owner\. Available com
 if test "$bot_restarted" = true
     set -ge ret_lowered_msg_text
     set -ge ret_msg_text
-    set -g update_id (math $update_id + 1)
     tg --editmsg $tmp_ret_chat_id $tmp_sent_msg_id "Bot restarted"
     set -ge tmp_ret_chat_id
     set -ge tmp_sent_msg_id
@@ -26,6 +25,8 @@ function bot_management --on-event modules_trigger
             end
             if test "$bot_restarted" = true
                 set -ge bot_restarted
+                set -ge ret_lowered_msg_text
+                set -g update_id (math $update_id + 1)
             else
                 tg --replymsg $ret_chat_id $ret_msg_id "Restarting bot"
                 set -gx bot_restarted true
