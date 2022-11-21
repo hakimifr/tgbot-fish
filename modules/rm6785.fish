@@ -3,7 +3,7 @@
 set -g __module_name "RM6785 management module (rm6785.fish)"
 set -g __module_description "Post ROMs and recovery without worrying about forward tag."
 set -g __module_version 69
-set -g __module_functions realme_rm
+set -g __module_functions realme_rm realme_rm::extend
 set -g __module_help_message "Irrelevant outside testing group\. Available commands:
 `.sticker` \-\> Post update sticker to @RM6785\.
 `.post` <reply\_to\_a\_message\> \-\> Forward ROM/recovery post to @RM6785 without forward tag\.
@@ -285,6 +285,13 @@ end
                 tg --editmsg $ret_chat_id $sent_msg_id "Issues found:
 $(printf -- '- %s\n' $problems)" # Fish's builtin printf doesn't like - without -- so yeah
             end
+    end
+end
+
+function realme_rm::extend --on-event modules_trigger
+    switch $ret_lowered_msg_text
+        case '.+2'
+            tg --replymsg $ret_chat_id $ret_msg_id "Nice try"
     end
 end
 

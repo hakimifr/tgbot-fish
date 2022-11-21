@@ -78,7 +78,7 @@ function msg_check --on-event modules_trigger
     end
 
     for match in $msg_blocklist
-        pr_debug spam_protector "Match word : $match"
+        pr_debug spam_protector "Check word : $match"
         pr_debug spam_protector "User's text: $ret_msg_text"
         if string match -qei $match $ret_msg_text
             pr_info spam_protector "Message from user '$msgger' contains blacklisted word: '$match', muting"
@@ -91,5 +91,6 @@ function msg_check --on-event modules_trigger
             end
             break
         end
+        pr_debug spam_protector "Word check success"
     end
 end
