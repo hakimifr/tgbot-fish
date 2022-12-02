@@ -3,7 +3,7 @@
 set -g __module_name "Bot management module (bot_management.fish)"
 set -g __module_description "Stuffs like .restart and .reload."
 set -g __module_version 69
-set -g __module_functions bot_management
+set -g __module_functions bot_management bot_management::update
 set -g __module_help_message "Irrelevant to other than bot owner\. Available commands:
 `.restart` \-\> Restart the bot\. Quite buggy\.
 `.reload` \-\> Reload all modules\."
@@ -48,5 +48,36 @@ function bot_management --on-event modules_trigger
             set -ge modules_functions
             load_modules
             tg --editmsg $ret_chat_id $sent_msg_id "Modules reloaded"
+        case '.update'
+            if not is_botowner
+                err_not_botowner
+                return
+            end
+            bot_management::update
     end
 end
+
+function bot_management::update
+    tg --replymsg $ret_chat_id $ret_msg_id "Updating bot"
+    pr_info bot_management::update "Updating bot"
+    pr_debug bot_management::update "Adding safe dir to git"
+
+    pr_debug bot_management::update "Running git pull"
+    git config --global --add safe.directory /app ||
+        begin
+            pr_info bot_management::update "Normal git pull failed, trying from scratch.."
+            git update-ref -d HEAD
+            git pull
+        end || set -l bot_update_error true
+
+    if test "$bot_update_error" = true
+        pr_error bot_management::update "Bot update failed."
+        tg --editmsg $ret_chat_id $sent_msg_id "Bot updated failed! please check logs"
+        return
+    end
+
+    pr_info bot_management::update "Bot updated successfully, restart recommended."
+
+    tg --editmsg $ret_chat_id $sent_msg_id "Bot updated successfully, restart recommended."
+end
+
